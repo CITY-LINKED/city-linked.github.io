@@ -3,58 +3,62 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Andorra la Vella Travel Card</title>
+  <title>City Linked Travel Cards</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #021f3f;
-      background-image: url('reef-background.jpg');
-      background-size: cover;
-      color: white;
+      background-color: #f0f8ff;
       margin: 0;
       padding: 20px;
-      display: flex;
-      justify-content: center;
+      text-align: center;
     }
-    .card {
-      background: rgba(0, 0, 0, 0.75);
+    .container {
+      max-width: 500px;
+      margin: auto;
       padding: 20px;
+      background: #ffffff;
       border-radius: 12px;
-      max-width: 400px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    select, button {
       width: 100%;
-    }
-    h1 {
-      text-align: center;
-    }
-    .links {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 20px;
-    }
-    .link-button {
-      background: #1e90ff;
-      border: none;
-      color: white;
       padding: 10px;
-      border-radius: 8px;
-      text-align: center;
-      text-decoration: none;
-      font-size: 14px;
+      margin: 10px 0;
+      font-size: 16px;
+    }
+    iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>Andorra la Vella</h1>
-    <div class="links">
-      <a class="link-button" href="https://www.google.com/maps/search/Andorra+la+Vella+restaurants" target="_blank">Restaurants</a>
-      <a class="link-button" href="https://www.google.com/maps/search/Andorra+la+Vella+ATM" target="_blank">ATM</a>
-      <a class="link-button" href="https://www.google.com/maps/search/Andorra+la+Vella+pharmacy" target="_blank">Pharmacy</a>
-      <a class="link-button" href="https://www.google.com/maps/search/Andorra+la+Vella+hospital" target="_blank">Hospital</a>
-      <a class="link-button" href="https://www.google.com/maps/search/Andorra+la+Vella+things+to+do" target="_blank">Things To Do</a>
-      <a class="link-button" href="https://www.google.com/maps/search/Andorra+la+Vella+dive+spots" target="_blank">Dive Spots</a>
-    </div>
+  <div class="container">
+    <h1>Choose Your Destination</h1>
+    <select id="countrySelect">
+      <option value="">Select Country</option>
+      <option value="Andorra">Andorra</option>
+    </select>
+
+    <select id="citySelect">
+      <option value="">Select City</option>
+      <option value="andorra-la-vella">Andorra la Vella</option>
+    </select>
+
+    <button onclick="loadCard()">View Travel Card</button>
+
+    <iframe id="cardFrame" src=""></iframe>
   </div>
+
+  <script>
+    function loadCard() {
+      const city = document.getElementById("citySelect").value;
+      if (city) {
+        document.getElementById("cardFrame").src = city + ".html";
+      }
+    }
+  </script>
 </body>
 </html>
