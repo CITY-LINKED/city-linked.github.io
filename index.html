@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>City Linked Cards</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #e8f0fe;
+      margin: 0;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    select, button {
+      font-size: 16px;
+      padding: 10px;
+      margin: 10px;
+      width: 90%;
+      max-width: 400px;
+    }
+    iframe {
+      width: 100%;
+      height: 600px;
+      border: none;
+      margin-top: 30px;
+    }
+    optgroup {
+      font-style: normal;
+      font-weight: bold;
+      padding-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Choose a Destination</h1>
+  <select id="citySelect">
+    <option value="">-- Select City --</option>
+    
+<optgroup label="🌍 Europe">
+  <option value="cards/lisbon.html">Lisbon</option>
+  <option value="cards/rome.html">Rome</option>
+  <option value="cards/amsterdam.html">Amsterdam</option>
+</optgroup>
+<optgroup label="🌏 Asia">
+  <option value="cards/bangkok.html">Bangkok</option>
+  <option value="cards/bali.html">Bali</option>
+  <option value="cards/hanoi.html">Hanoi</option>
+</optgroup>
+<optgroup label="🌍 Africa">
+  <option value="cards/cape-town.html">Cape Town</option>
+  <option value="cards/marrakech.html">Marrakech</option>
+  <option value="cards/cairo.html">Cairo</option>
+</optgroup>
+<optgroup label="🌎 Americas">
+  <option value="cards/new-york.html">New York</option>
+  <option value="cards/mexico-city.html">Mexico City</option>
+  <option value="cards/rio-de-janeiro.html">Rio de Janeiro</option>
+</optgroup>
+<optgroup label="🌊 Oceania">
+  <option value="cards/sydney.html">Sydney</option>
+  <option value="cards/auckland.html">Auckland</option>
+  <option value="cards/nadi.html">Nadi</option>
+</optgroup>
+<optgroup label="🕌 Middle East">
+  <option value="cards/dubai.html">Dubai</option>
+  <option value="cards/istanbul.html">Istanbul</option>
+  <option value="cards/muscat.html">Muscat</option>
+</optgroup>
+<optgroup label="🎁 Bonus">
+  <option value="cards/andorra-la-vella.html">Andorra la Vella</option>
+</optgroup>
+
+  </select>
+  <br>
+  <button onclick="loadCard()">View Travel Card</button>
+  <iframe id="cardFrame" src=""></iframe>
+  <script>
+    function loadCard() {
+      const city = document.getElementById('citySelect').value;
+      if (city) {
+        document.getElementById('cardFrame').src = city;
+      }
+    }
+  </script>
+</body>
+</html>
