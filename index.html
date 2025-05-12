@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>City Linked Cards</title>
+  <style>
+    body { font-family: Arial; text-align: center; background: #f4f4f4; padding: 20px; }
+    select, button { padding: 10px; margin: 10px; font-size: 16px; }
+    iframe { width: 100%; height: 600px; border: none; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1>Choose a City</h1>
+  <select id="citySelect">
+    <option value='lisbon'>Lisbon</option>
+<option value='rome'>Rome</option>
+<option value='amsterdam'>Amsterdam</option>
+<option value='bangkok'>Bangkok</option>
+<option value='bali'>Bali</option>
+<option value='hanoi'>Hanoi</option>
+<option value='cape-town'>Cape Town</option>
+<option value='marrakech'>Marrakech</option>
+<option value='cairo'>Cairo</option>
+<option value='new-york'>New York</option>
+<option value='mexico-city'>Mexico City</option>
+<option value='rio-de-janeiro'>Rio De Janeiro</option>
+<option value='sydney'>Sydney</option>
+<option value='auckland'>Auckland</option>
+<option value='nadi'>Nadi</option>
+<option value='dubai'>Dubai</option>
+<option value='istanbul'>Istanbul</option>
+<option value='muscat'>Muscat</option>
+<option value='andorra-la-vella'>Andorra La Vella</option>
+  </select>
+  <button onclick="loadCard()">View Travel Card</button>
+  <iframe id="cardFrame" src=""></iframe>
+  <script>
+    function loadCard() {
+      const city = document.getElementById('citySelect').value;
+      if (city) {
+        document.getElementById('cardFrame').src = city + '.html';
+      }
+    }
+  </script>
+</body>
+</html>
