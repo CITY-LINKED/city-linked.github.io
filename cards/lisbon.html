@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lisbon Travel Card</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #111;
+      color: white;
+    }
+    .card-section {
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0;
+    }
+    .front, .back {
+      background-size: cover;
+      background-position: center;
+      height: 400px;
+      position: relative;
+    }
+    .front {
+      background-image: url('../images/lisbon.jpg');
+    }
+    .back {
+      background-image: url('../images/lisbon.jpg');
+      margin-top: 20px;
+    }
+    .city-banner {
+      position: absolute;
+      top: 40%;
+      left: 0;
+      background-color: rgba(255,255,255,0.2);
+      padding: 20px 40px;
+      font-size: 36px;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+    .top-icons {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: rgba(255,255,255,0.8);
+      padding: 10px 20px;
+      border-radius: 10px;
+    }
+    .top-icons i {
+      margin: 0 10px;
+      color: black;
+      font-size: 20px;
+    }
+    .back-banner {
+      position: absolute;
+      top: 50%;
+      left: 5%;
+      width: 90%;
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 20px;
+      text-align: center;
+      border-radius: 10px;
+    }
+    .back-banner i {
+      margin: 0 15px;
+      font-size: 22px;
+    }
+  </style>
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="card-section">
+    <div class="front">
+      <div class="city-banner">CITY LINKED</div>
+      <div class="top-icons">
+        <i class="fas fa-suitcase"></i>
+        <i class="fas fa-map-marked-alt"></i>
+        <i class="fas fa-utensils"></i>
+        <i class="fas fa-coffee"></i>
+        <i class="fas fa-beer"></i>
+      </div>
+    </div>
+
+    <div class="back">
+      <div class="back-banner">
+        <i class="fas fa-subway"></i>
+        <i class="fas fa-bed"></i>
+        <i class="fas fa-cloud-sun-rain"></i>
+        <i class="fas fa-credit-card"></i>
+        <i class="fas fa-hospital"></i>
+        <i class="fas fa-gas-pump"></i>
+        <i class="fas fa-ambulance"></i>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
