@@ -9,7 +9,7 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Agrandir Grand', Arial, sans-serif;
+      <!-- font-family: 'Agrandir Grand', Arial, sans-serif; -->
       background-color: black;
       color: white;
       display: flex;
@@ -23,11 +23,13 @@
     .city-name {
       position: absolute;
       top: 10px;
+      left: 5;
       width: 100%;
-      text-align: center;
+      <!-- text-align: center; -->
       font-size: 22px;
-      color: white;
-      font-weight: 300;
+      color: black; <!-- white; -->
+      font-weight: bold; <!-- 300; -->
+      font-family: Agrandir Grand, sans-serif;
       text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
       z-index: 5;
     }
@@ -50,12 +52,11 @@
     }
     .city-banner {
       position: absolute;
-      top: 10%;  <!-- 20%; -->
+      top: 15%;  <!-- 20%; -->
       left: 0;
       background: grey;
       padding: 10px 30px;
       font-size: 28px;
-      font-family: 'Agrandir Grand', Arial, sans-serif;
       font-weight: bold;
       text-transform: uppercase;
     }
