@@ -27,8 +27,7 @@
       text-indent: 10px;
       font-size: 25px;
       color: black;
-      font-weight: bold; 
-      text-shadow: 0px 0px 0px rgba(0,0,0,0);
+      font-weight: bold;
       z-index: 5;
     }
     .card {
@@ -38,7 +37,7 @@
       background-size: cover;
       background-position: center;
       border-radius: 12px;
-      margin: 5px 0; 
+      margin: 5px 0;
       position: relative;
       overflow: hidden;
     }
@@ -50,7 +49,7 @@
     }
     .city-banner {
       position: absolute;
-      top: 20%;  
+      top: 20%;
       left: 0;
       background: grey;
       padding: 10px 25px;
@@ -71,7 +70,7 @@
       justify-content: flex-end;
       padding-right: 5px;
     }
-    .top-icons i {
+    .top-icons a i {
       color: black;
       font-size: 18px;
       margin: 0 13px;
@@ -87,25 +86,21 @@
       justify-content: space-between;
       padding: 20px;
     }
-    .row {
+    .row, .bottom-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-size: 16px;
     }
-    .row i {
-      font-size: 18px;
-      margin-right: 5px;
-    }
-    .bottom-bar {
+    .row a, .bottom-bar a {
+      color: white;
+      text-decoration: none;
       display: flex;
-      justify-content: space-around;
-      padding-top: 10px;
-      border-top: 1px solid white;
+      align-items: center;
       font-size: 14px;
     }
-    .bottom-bar i {
-      font-size: 16px;
+    .row i, .bottom-bar i {
+      font-size: 18px;
       margin-right: 5px;
     }
   </style>
@@ -116,36 +111,36 @@
   <div class="card front">
     <div class="city-banner">CITY LINKED</div>
     <div class="top-icons">
-      <a href="#"><i class="fas fa-landmark"></i></a>
-      <a href="#"><i class="fas fa-map"></i></a>
-      <a href="#"><i class="fas fa-utensils"></i></a>
-      <a href="#"><i class="fas fa-mug-hot"></i></a>
-      <a href="#"><i class="fas fa-beer"></i></a>
+      <a href="https://www.google.com/maps/search/Lisbon+things+to+do" target="_blank"><i class="fas fa-landmark"></i></a>
+      <a href="https://www.google.com/maps/search/Lisbon+places+to+visit" target="_blank"><i class="fas fa-map"></i></a>
+      <a href="https://www.google.com/maps/search/Lisbon+restaurants" target="_blank"><i class="fas fa-utensils"></i></a>
+      <a href="https://www.google.com/maps/search/Lisbon+coffee+shops" target="_blank"><i class="fas fa-mug-hot"></i></a>
+      <a href="https://www.google.com/maps/search/Lisbon+bars" target="_blank"><i class="fas fa-beer"></i></a>
     </div>
   </div>
 
   <div class="card back">
     <div class="back-panel">
       <div class="row">
-        <span><i class="fas fa-subway"></i>Metro</span>
-        <span><i class="fas fa-bed"></i>Accommodation</span>
-        <span><i class="fas fa-cloud-sun-rain"></i>Weather</span>
+        <a href="https://www.google.com/maps/search/Lisbon+metro" target="_blank"><i class="fas fa-subway"></i>Metro</a>
+        <a href="https://www.google.com/maps/search/Lisbon+hotels" target="_blank"><i class="fas fa-bed"></i>Accommodation</a>
+        <a href="https://www.google.com/search?q=Lisbon+weather" target="_blank"><i class="fas fa-cloud-sun-rain"></i>Weather</a>
       </div>
       <div class="row">
-        <span><i class="fas fa-train"></i>Train</span>
-        <span><i class="fas fa-credit-card"></i>ATM</span>
+        <a href="https://www.google.com/maps/search/Lisbon+train+station" target="_blank"><i class="fas fa-train"></i>Train</a>
+        <a href="https://www.google.com/maps/search/Lisbon+ATM" target="_blank"><i class="fas fa-credit-card"></i>ATM</a>
       </div>
       <div class="row">
-        <span><i class="fas fa-car"></i>Rent-a-Car</span>
-        <span><i class="fas fa-motorcycle"></i>Motorcycle</span>
+        <a href="https://www.google.com/maps/search/Lisbon+car+rental" target="_blank"><i class="fas fa-car"></i>Rent-a-Car</a>
+        <a href="https://www.google.com/maps/search/Lisbon+motorcycle+rental" target="_blank"><i class="fas fa-motorcycle"></i>Motorcycle</a>
       </div>
       <div class="row">
-        <span><i class="fas fa-gas-pump"></i>Gas</span>
+        <a href="https://www.google.com/maps/search/Lisbon+gas+station" target="_blank"><i class="fas fa-gas-pump"></i>Gas</a>
       </div>
       <div class="bottom-bar">
-        <span><i class="fas fa-prescription-bottle"></i>Pharmacies</span>
-        <span><i class="fas fa-hospital"></i>Hospitals</span>
-        <span><i class="fas fa-phone"></i>Emergency</span>
+        <a href="https://www.google.com/maps/search/Lisbon+pharmacies" target="_blank"><i class="fas fa-prescription-bottle"></i>Pharmacies</a>
+        <a href="https://www.google.com/maps/search/Lisbon+hospitals" target="_blank"><i class="fas fa-hospital"></i>Hospitals</a>
+        <a href="tel:112"><i class="fas fa-phone"></i>Emergency</a>
       </div>
     </div>
   </div>
