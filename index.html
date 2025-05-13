@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>City Linked - Travel Cards</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #e6f0ff;
+      margin: 0;
+      padding: 40px;
+      text-align: center;
+    }
+    select, button {
+      padding: 10px;
+      font-size: 16px;
+      margin: 10px;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+  </style>
+  <script>
+    function openCard() {
+      const city = document.getElementById("city-select").value;
+      const url = `./cards/${city.toLowerCase()}.html`;
+      window.open(url, "_blank");
+    }
+  </script>
+</head>
+<body>
+  <h1>Choose a Destination</h1>
+  <select id="city-select">
+    <option value="lisbon">Lisbon</option>
+    <option value="dubai">Dubai</option>
+    <option value="bangkok">Bangkok</option>
+    <option value="cairo">Cairo</option>
+    <option value="barcelona">Barcelona</option>
+    <option value="newyork">New York</option>
+    <option value="hanoi">Hanoi</option>
+    <option value="rio">Rio</option>
+    <option value="capetown">Cape Town</option>
+  </select>
+  <br/>
+  <button onclick="openCard()">View Travel Card</button>
+</body>
+</html>
