@@ -30,17 +30,43 @@
   </script>
 </head>
 <body>
-  <h1>Choose a Destination</h1>
-  <select id="city-select">
-    <option value="lisbon">Lisbon</option>
-    <option value="dubai">Dubai</option>
-    <option value="bangkok">Bangkok</option>
-    <option value="cairo">Cairo</option>
-    <option value="barcelona">Barcelona</option>
-    <option value="newyork">NewYork</option>
-    <option value="hanoi">Hanoi</option>
-    <option value="rio">Rio</option>
-    <option value="capeTown">CapeTown</option>
+  <h1>Choose a City</h1>
+  <select id="citySelect">
+    <option value="">Select a destination</option>
+    <optgroup label="Europe">
+<option value="cards/lisbon.html">Lisbon</option>
+<option value="cards/rome.html">Rome</option>
+<option value="cards/amsterdam.html">Amsterdam</option>
+</optgroup>
+<optgroup label="Asia">
+<option value="cards/bangkok.html">Bangkok</option>
+<option value="cards/bali.html">Bali</option>
+<option value="cards/hanoi.html">Hanoi</option>
+</optgroup>
+<optgroup label="Africa">
+<option value="cards/cape-town.html">Cape Town</option>
+<option value="cards/marrakech.html">Marrakech</option>
+<option value="cards/cairo.html">Cairo</option>
+</optgroup>
+<optgroup label="Americas">
+<option value="cards/new-york.html">New York</option>
+<option value="cards/mexico-city.html">Mexico City</option>
+<option value="cards/rio-de-janeiro.html">Rio De Janeiro</option>
+</optgroup>
+<optgroup label="Oceania">
+<option value="cards/sydney.html">Sydney</option>
+<option value="cards/auckland.html">Auckland</option>
+<option value="cards/nadi.html">Nadi</option>
+</optgroup>
+<optgroup label="Middle East">
+<option value="cards/dubai.html">Dubai</option>
+<option value="cards/istanbul.html">Istanbul</option>
+<option value="cards/muscat.html">Muscat</option>
+</optgroup>
+<optgroup label="Bonus">
+<option value="cards/andorra-la-vella.html">Andorra La Vella</option>
+</optgroup>
+
   </select>
   <br/>
   <button onclick="openCard()">View Travel Card</button>
