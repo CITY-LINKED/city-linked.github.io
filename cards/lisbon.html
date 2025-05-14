@@ -86,11 +86,19 @@
       justify-content: space-between;
       padding: 20px;
     }
-    .row, .bottom-bar {
+    .row {
       display: flex;
       justify-content: space-between;
       align-items: center;
       font-size: 16px;
+    }
+   .bottom-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 16px;
+      border-top: 1px solid white; /* ✅ adds the white line */
+      padding-top: 8px;
     }
     .row a, .bottom-bar a {
       color: white;
