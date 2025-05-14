@@ -60,7 +60,7 @@
 
     .tab:hover, .tab.active {
       background: linear-gradient(to bottom, #ffffff, #e0e0e0);
-      color: #16293D;
+      color: #2C4A70;
     }
 
     .cards-container {
@@ -111,24 +111,18 @@
   }
 </script>
 
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-5HCQPECLE0"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-5HCQPECLE0');
-</script>
-
 </head>
 <body>
   <header>
     <img src="logo.png" alt="City Linked Logo">
     <div class="tagline">Plan less. Explore more.</div>
   </header>
-  <div style="text-align: center; font-size: 34px; font-weight: bold; color: white; margin-top: 20px;">CITY LINKED</div>
+  <div style="text-align: center; font-size: 32px; font-weight: bold; color: white; margin-top: 20px;">CITY LINKED</div>
 
   <h1 style="font-size: 22px; font-weight: normal; text-align: center; color: white; margin-top: 10px;">Travel Cards</h1>
+
+
+  
 
   <div class="tabs">
     <div class="tab active" onclick="filterCards('all')">All</div>
@@ -139,7 +133,7 @@
     <div class="tab" onclick="filterCards('oceania')">Oceania</div>
     <div class="tab" onclick="filterCards('middleeast')">Middle East</div>
   </div>
-  
+
   <div class="cards-container" id="cards-container"></div>
 
   <script>
@@ -189,13 +183,42 @@
     renderCards("all");
   </script>
 
-<div style="text-align: center; margin: 30px 0;">
-  <a href="https://docs.google.com/forms/d/e/1FAIpQLSeyGnXMXN3vfFD2ZfMGuMq98SgGXvdKf60ji0wIJdoKMk8vpg/viewform?usp=header"
-     target="_blank"
-     style="display: inline-block; padding: 8px 16px; font-size: 14px; font-weight: bold; color: white; background: rgba(255, 255, 255, 0.12); border: 1px solid #999; border-radius: 6px; text-decoration: none;">
-    🌍 Suggest a destination
-  </a>
-</div>
+<script>
+  // Track city card clicks
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll('.card-preview').forEach(card => {
+      card.addEventListener('click', () => {
+        const cityName = card.innerText.trim();
+        gtag('event', 'click_city_card', {
+          'event_category': 'Navigation',
+          'event_label': cityName
+        });
+      });
+    });
+
+    // Track continent tab clicks
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const region = tab.innerText.trim();
+        gtag('event', 'click_continent_tab', {
+          'event_category': 'Navigation',
+          'event_label': region
+        });
+      });
+    });
+
+    // Track "Suggest a destination" button
+    const suggestBtn = document.querySelector('a[href*="forms.gle"], a[href*="docs.google.com/forms"]');
+    if (suggestBtn) {
+      suggestBtn.addEventListener('click', () => {
+        gtag('event', 'click_suggest_destination', {
+          'event_category': 'Engagement',
+          'event_label': 'Suggest Button'
+        });
+      });
+    }
+  });
+</script>
 
 </body>
 </html>
