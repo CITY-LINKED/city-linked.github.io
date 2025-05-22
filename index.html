@@ -183,11 +183,7 @@
         const div = document.createElement("div");
         div.className = "card-preview";
         div.style.backgroundImage = `url('images/${card.img}')`;
-        div.addEventListener("click", function (e) {
-      if (!e.target.closest("a")) {
-        window.open(card.link, "_blank");
-      }
-    });
+        div.onclick = () => window.open(card.link, '_blank');
         div.innerHTML = `
           <span>${card.name}</span>
           <a href="downloads/${card.name.replace(/\s+/g, "-")}-Card-Launcher.html" title="Download"
