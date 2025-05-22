@@ -1,13 +1,14 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>City Linked | Travel Cards </title>
-  <link rel="icon" href="favicon.ico" type="image/x-icon" />
-  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-  <link href="https://fonts.googleapis.com/css2?family=Gruppo&display=swap" rel="stylesheet">
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>City Linked | Travel Cards </title>
+<link href="favicon.ico" rel="icon" type="image/x-icon"/>
+<link href="favicon.ico" rel="shortcut icon" type="image/x-icon"/>
+<link href="https://fonts.googleapis.com/css2?family=Gruppo&amp;display=swap" rel="stylesheet"/>
+<style>
     body {
       margin: 0;
       font-family: 'Gruppo', sans-serif;
@@ -100,56 +101,48 @@
       text-align: center;
     }
   </style>
-
 <!-- PWA Meta -->
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#002B5C">
+<link href="manifest.json" rel="manifest"/>
+<meta content="#002B5C" name="theme-color"/>
 <script>
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('service-worker.js')
       .then(function() { console.log("Service Worker Registered"); });
   }
 </script>
-
 <!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-5HCQPECLE0"></script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-5HCQPECLE0"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-5HCQPECLE0');
 </script>
-
 </head>
 <body>
 <header style="display: flex; align-items: center; padding: 10px 20px; background: linear-gradient(to right, #006A8F, #00A9CC);">
-  <img src="logo.png" alt="City Linked Logo" style="height: 60px; margin-right: 15px;">
-  <div style="display: flex; flex-direction: column;">
-    <span style="font-size: 28px; font-weight: bold; color: white;">CITY LINKED</span>
-    <span style="font-size: 18px; color: white;">Plan less. Explore more.</span>
-  </div>
+<img alt="City Linked Logo" src="logo.png" style="height: 60px; margin-right: 15px;"/>
+<div style="display: flex; flex-direction: column;">
+<span style="font-size: 28px; font-weight: bold; color: white;">CITY LINKED</span>
+<span style="font-size: 18px; color: white;">Plan less. Explore more.</span>
+</div>
 </header>
-  
-  <div style="text-align: center; font-size: 16px; font-weight: normal; color: white; margin: 20px;">
-  🌍 Explore cities the smart way with Travel Cards.<br>
+<div style="text-align: center; font-size: 16px; font-weight: normal; color: white; margin: 20px;">
+  🌍 Explore cities the smart way with Travel Cards.<br/>
   All information you need in one place.
 </div>
-
-  <h1 style="font-size: 22px; font-weight: normal; text-align: center; color: white; margin-top: 10px;">Choose your destination</h1>
-
-  <div class="tabs">
-    <div class="tab active" onclick="filterCards('all')">All</div>
-    <div class="tab" onclick="filterCards('europe')">Europe</div>
-    <div class="tab" onclick="filterCards('asia')">Asia</div>
-    <div class="tab" onclick="filterCards('africa')">Africa</div>
-    <div class="tab" onclick="filterCards('americas')">Americas</div>
-    <div class="tab" onclick="filterCards('oceania')">Oceania</div>
-    <div class="tab" onclick="filterCards('middleeast')">Middle East</div>
-  </div>
-  
-  <div class="cards-container" id="cards-container"></div>
-
-  <script>
+<h1 style="font-size: 22px; font-weight: normal; text-align: center; color: white; margin-top: 10px;">Choose your destination</h1>
+<div class="tabs">
+<div class="tab active" onclick="filterCards('all')">All</div>
+<div class="tab" onclick="filterCards('europe')">Europe</div>
+<div class="tab" onclick="filterCards('asia')">Asia</div>
+<div class="tab" onclick="filterCards('africa')">Africa</div>
+<div class="tab" onclick="filterCards('americas')">Americas</div>
+<div class="tab" onclick="filterCards('oceania')">Oceania</div>
+<div class="tab" onclick="filterCards('middleeast')">Middle East</div>
+</div>
+<div class="cards-container" id="cards-container"></div>
+<script>
     const cards = [
       { name: "Lisbon", img: "lisbon.jpg", link: "cards/lisbon.html", region: "europe" },
       { name: "Rome", img: "rome.jpg", link: "cards/rome.html", region: "europe" },
@@ -196,16 +189,12 @@
 
     renderCards("all");
   </script>
-
 <div style="text-align: center; margin: 40px 0;">
-  <p style="font-size: 14px; color: white;">🔍 Can’t find the city you’re looking for?</p>
-  <a href="https://docs.google.com/forms/d/e/1FAIpQLSeyGnXMXN3vfFD2ZfMGuMq98SgGXvdKf60ji0wIJdoKMk8vpg/viewform?usp=header"
-     target="_blank"
-     style="display: inline-block; padding: 12px 24px; font-size: 15px; font-weight: bold; color: white; background: #006A8F; border-radius: 8px; text-decoration: none; box-shadow: 0 2px 6px rgba(0,0,0,0.3);">
+<p style="font-size: 14px; color: white;">🔍 Can’t find the city you’re looking for?</p>
+<a href="https://docs.google.com/forms/d/e/1FAIpQLSeyGnXMXN3vfFD2ZfMGuMq98SgGXvdKf60ji0wIJdoKMk8vpg/viewform?usp=header" style="display: inline-block; padding: 12px 24px; font-size: 15px; font-weight: bold; color: white; background: #006A8F; border-radius: 8px; text-decoration: none; box-shadow: 0 2px 6px rgba(0,0,0,0.3);" target="_blank">
     🌍 Suggest a Destination
   </a>
 </div>
-
 <script>
   // Track city card clicks
   document.addEventListener("DOMContentLoaded", function () {
@@ -243,8 +232,50 @@
   });
 </script>
 <footer style="text-align:center; margin: 50px 0; font-size: 12px; color: white">
-  Built by one traveler for others. <br>
-  📬 Share a card with a friend
+  Built by one traveler for others. Share a card with a friend
+
+<div style="margin-top: 10px;">
+<!-- WhatsApp -->
+<a href="https://wa.me/?text=Check%20out%20CITY%20LINKED%20travel%20cards%20%F0%9F%8C%8D%20Fast%2C%20clean%20guides%20at%20city-linked.github.io" style="margin: 5px; display:inline-block; background-color: white; border-radius: 6px; padding: 2px;" target="_blank">
+<img alt="WhatsApp" height="32" src="https://img.icons8.com/color/48/000000/whatsapp--v1.png" style="display:inline-block; vertical-align:middle; border:none;" width="32"/>
+</a>
+<!-- Telegram -->
+<a href="https://t.me/share/url?url=https://city-linked.github.io&amp;text=Explore%20cities%20faster%20with%20CITY%20LINKED%20cards" style="margin: 5px; display:inline-block; background-color: white; border-radius: 6px; padding: 2px;" target="_blank">
+<img alt="Telegram" height="32" src="https://img.icons8.com/color/48/000000/telegram-app--v1.png" style="display:inline-block; vertical-align:middle; border:none;" width="32"/>
+</a>
+<!-- Facebook -->
+<a href="https://www.facebook.com/sharer/sharer.php?u=https://city-linked.github.io" style="margin: 5px; display:inline-block; background-color: white; border-radius: 6px; padding: 2px;" target="_blank">
+<img alt="Facebook" height="32" src="https://img.icons8.com/color/48/000000/facebook.png" style="display:inline-block; vertical-align:middle; border:none;" width="32"/>
+</a>
+<!-- Facebook Messenger -->
+<a href="fb-messenger://share/?link=https://city-linked.github.io" style="margin: 5px; display:inline-block; background-color: white; border-radius: 6px; padding: 2px;" target="_blank">
+<img alt="Messenger" height="32" src="https://img.icons8.com/color/48/000000/facebook-messenger.png" style="display:inline-block; vertical-align:middle; border:none;" width="32"/>
+</a>
+<!-- Twitter -->
+<a href="https://twitter.com/intent/tweet?text=Explore%20cities%20faster%20with%20CITY%20LINKED%20%F0%9F%97%BD%20https://city-linked.github.io" style="margin: 5px; display:inline-block; background-color: white; border-radius: 6px; padding: 2px; background-color: white; border-radius: 6px; padding: 2px;" target="_blank">
+<img alt="Twitter" height="32" src="https://img.icons8.com/color/48/000000/twitter--v1.png" style="display:inline-block; vertical-align:middle; border:none;" width="32"/>
+</a>
+<!-- Instagram -->
+<a href="#" onclick="navigator.clipboard.writeText('https://city-linked.github.io'); alert('Link copied! Share it on your Instagram Story or Bio ✨'); return false;" style="margin: 5px; display:inline-block; background-color: white; border-radius: 6px; padding: 2px;">
+<img alt="Instagram" height="32" src="https://img.icons8.com/color/48/000000/instagram-new--v1.png" style="display:inline-block; vertical-align:middle; border:none;" width="32"/>
+</a>
+<!-- Reddit -->
+<a href="https://www.reddit.com/submit?url=https://city-linked.github.io&amp;title=City%20Linked%20%7C%20Explore%20cities%20in%20one%20click" style="margin: 5px; display:inline-block; background-color: white; border-radius: 6px; padding: 2px;" target="_blank">
+<img alt="Reddit" height="32" src="https://img.icons8.com/color/48/000000/reddit.png" style="display:inline-block; vertical-align:middle; border:none;" width="32"/>
+</a>
+<!-- LinkedIn
+  <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://city-linked.github.io" target="_blank" style="margin: 5px;">
+    <img src="https://img.icons8.com/color/48/000000/linkedin.png" alt="LinkedIn" width="32" height="32" />
+  </a>
+   Email
+  <a href="mailto:?subject=Check%20out%20CITY%20LINKED&body=Travel%20cards%20for%20any%20city.%20Clean,%20fast,%20and%20free.%20Try%20it%20at:%20https://city-linked.github.io" target="_blank" style="margin: 5px;">
+    <img src="https://img.icons8.com/color/48/000000/apple-mail.png" alt="Email" width="32" height="32" />
+  </a>
+  <!-- Copy Link -->
+<a href="#" onclick="navigator.clipboard.writeText('https://city-linked.github.io'); alert('Link copied!'); return false;" style="margin: 5px; display:inline-block; background-color: white; border-radius: 6px; padding: 2px;">
+<img alt="Copy Link" height="32" src="https://img.icons8.com/color/48/000000/copy-link.png" style="display:inline-block; vertical-align:middle; border:none;" width="32"/>
+</a>
+</div>
 </footer>
 </body>
 </html>
