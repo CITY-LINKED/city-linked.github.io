@@ -123,7 +123,7 @@
 </head>
 <body>
 <header style="display: flex; align-items: center; padding: 10px 20px; background: linear-gradient(to right, #006A8F, #00A9CC);">
-  <img src="logo.png" alt="City Linked Logo" style="height: 60px; margin-right: 20px;">
+  <img src="logo.png" alt="City Linked Logo" style="height: 60px; margin-right: 15px;">
   <div style="display: flex; flex-direction: column;">
     <span style="font-size: 28px; font-weight: bold; color: white;">CITY LINKED</span>
     <span style="font-size: 18px; color: white;">Plan less. Explore more.</span>
@@ -135,7 +135,7 @@
   All information you need in one place.
 </div>
 
-  <h1 style="font-size: 20px; font-weight: normal; text-align: center; color: white; margin-top: 10px;">Choose your destination</h1>
+  <h1 style="font-size: 22px; font-weight: normal; text-align: center; color: white; margin-top: 10px;">Choose your destination</h1>
 
   <div class="tabs">
     <div class="tab active" onclick="filterCards('all')">All</div>
@@ -175,6 +175,7 @@
 
     const container = document.getElementById("cards-container");
 
+    
     function renderCards(region) {
       container.innerHTML = "";
       const filtered = region === "all" ? cards : cards.filter(card => card.region === region);
@@ -182,13 +183,19 @@
         const div = document.createElement("div");
         div.className = "card-preview";
         div.style.backgroundImage = `url('images/${card.img}')`;
-        div.innerHTML = `<span>${card.name}</span>`;
         div.onclick = () => window.open(card.link, '_blank');
+        div.innerHTML = `
+          <span>${card.name}</span>
+          <a href="downloads/${card.name.replace(/\s+/g, "-")}-Card-Launcher.html" title="Download"
+             onclick="event.stopPropagation();"
+             style="position: absolute; top: 6px; right: 6px; z-index: 2;">
+            <img src="images/download-icon-white.png" alt="Download" style="height: 20px;">
+          </a>
+        `;
         container.appendChild(div);
       });
     }
-
-    function filterCards(region) {
+function filterCards(region) {
       document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
       event.target.classList.add('active');
       renderCards(region);
@@ -243,7 +250,8 @@
   });
 </script>
 <footer style="text-align:center; margin: 50px 0; font-size: 12px; color: white">
-  Built by one traveler for others. 📬 Share a card with a friend
+  Built by one traveler for others. <br>
+  📬 Or share a card with a friend
 </footer>
 </body>
 </html>
