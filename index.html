@@ -139,7 +139,6 @@
 
   <div class="tabs">
     <div class="tab active" onclick="filterCards('all')">All</div>
-    <div onclick="filterCards('favorites')" style="font-size: 22px; color: white; margin: 8px 0 0 10px; cursor: pointer;">★</div>
     <div class="tab" onclick="filterCards('europe')">Europe</div>
     <div class="tab" onclick="filterCards('asia')">Asia</div>
     <div class="tab" onclick="filterCards('africa')">Africa</div>
@@ -176,7 +175,6 @@
 
     const container = document.getElementById("cards-container");
 
-    
     function renderCards(region) {
       container.innerHTML = "";
       const filtered = region === "all" ? cards : cards.filter(card => card.region === region);
@@ -184,20 +182,13 @@
         const div = document.createElement("div");
         div.className = "card-preview";
         div.style.backgroundImage = `url('images/${card.img}')`;
+        div.innerHTML = `<span>${card.name}</span>`;
         div.onclick = () => window.open(card.link, '_blank');
-        div.innerHTML = `
-          <span>${card.name}</span>
-          <svg viewBox="0 0 24 24"
-         onclick="event.stopPropagation(); toggleFavorite(card.name, this);"
-         style="position: absolute; top: 6px; right: 6px; height: 20px; width: 20px; z-index: 2; cursor: pointer;"
-         fill="\${isFavorite(card.name) ? 'gold' : 'none'}" stroke="gold" stroke-width="2">
-         <polygon points="12,2 15,9 22,9 17,14 19,22 12,18 5,22 7,14 2,9 9,9"/>
-    </svg>
-        `;
         container.appendChild(div);
       });
     }
-function filterCards(region) {
+
+    function filterCards(region) {
       document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
       event.target.classList.add('active');
       renderCards(region);
@@ -255,28 +246,6 @@ function filterCards(region) {
   Built by one traveler for others. <br>
   📬 Or share a card with a friend
 </footer>
-
-<script>
-function isFavorite(cityName) {
-  const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
-  return favorites.includes(cityName);
-}
-function toggleFavorite(cityName, icon) {
-  let favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
-  if (favorites.includes(cityName)) {
-    favorites = favorites.filter(c => c !== cityName);
-    icon.setAttribute("fill", "none");
-  } else {
-    favorites.push(cityName);
-    icon.setAttribute("fill", "gold");
-  }
-  localStorage.setItem("favorites", JSON.stringify(favorites));
-  if (document.querySelector('div[onclick*="filterCards"][style]')?.textContent.trim() === "★") {
-    renderCards("favorites");
-  }
-}
-</script>
-
 </body>
 </html>
 .
