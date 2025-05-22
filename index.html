@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>City Linked | Travel Cards</title>
+  <title>City Linked | Travel Cards </title>
   <link rel="icon" href="favicon.ico" type="image/x-icon" />
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
   <link href="https://fonts.googleapis.com/css2?family=Gruppo&display=swap" rel="stylesheet">
@@ -67,7 +67,7 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      padding: 0 10px 40px;
+      padding: 0 10px 0px;
     }
 
     .card-preview {
@@ -122,13 +122,20 @@
 
 </head>
 <body>
-  <header>
-    <img src="logo.png" alt="City Linked Logo">
-    <div class="tagline">Plan less. Explore more.</div>
-  </header>
-  <div style="text-align: center; font-size: 34px; font-weight: bold; color: white; margin-top: 20px;">CITY LINKED</div>
+<header style="display: flex; align-items: center; padding: 10px 20px; background: linear-gradient(to right, #006A8F, #00A9CC);">
+  <img src="logo.png" alt="City Linked Logo" style="height: 60px; margin-right: 15px;">
+  <div style="display: flex; flex-direction: column;">
+    <span style="font-size: 28px; font-weight: bold; color: white;">CITY LINKED</span>
+    <span style="font-size: 18px; color: white;">Plan less. Explore more.</span>
+  </div>
+</header>
+  
+  <div style="text-align: center; font-size: 16px; font-weight: normal; color: white; margin: 20px;">
+  🌍 Explore cities the smart way with Travel Cards.<br>
+  All information you need in one place.
+</div>
 
-  <h1 style="font-size: 22px; font-weight: normal; text-align: center; color: white; margin-top: 10px;">Travel Cards</h1>
+  <h1 style="font-size: 22px; font-weight: normal; text-align: center; color: white; margin-top: 10px;">Choose your destination</h1>
 
   <div class="tabs">
     <div class="tab active" onclick="filterCards('all')">All</div>
@@ -190,14 +197,14 @@
     renderCards("all");
   </script>
 
-<div style="text-align: center; margin: 30px 0;">
+<div style="text-align: center; margin: 40px 0;">
+  <p style="font-size: 14px; color: white;">🔍 Can’t find the city you’re looking for?</p>
   <a href="https://docs.google.com/forms/d/e/1FAIpQLSeyGnXMXN3vfFD2ZfMGuMq98SgGXvdKf60ji0wIJdoKMk8vpg/viewform?usp=header"
      target="_blank"
-     style="display: inline-block; padding: 8px 16px; font-size: 14px; font-weight: bold; color: white; background: rgba(255, 255, 255, 0.12); border: 1px solid #999; border-radius: 6px; text-decoration: none;">
-    🌍 Suggest a destination
+     style="display: inline-block; padding: 12px 24px; font-size: 15px; font-weight: bold; color: white; background: #006A8F; border-radius: 8px; text-decoration: none; box-shadow: 0 2px 6px rgba(0,0,0,0.3);">
+    🌍 Suggest a Destination
   </a>
 </div>
-
 
 <script>
   // Track city card clicks
@@ -235,7 +242,10 @@
     }
   });
 </script>
-
+<footer style="text-align:center; margin: 50px 0; font-size: 12px; color: white">
+  Built by one traveler for others. <br>
+  📬 Or share a card with a friend
+</footer>
 </body>
 </html>
 .
