@@ -68,8 +68,7 @@
       votes[city] = (votes[city] || 0) + 1;
       localStorage.setItem("votes", JSON.stringify(votes));
       localStorage.setItem("voted", "true");
-      alert("Thanks! Your vote has been counted.");
-      location.reload();
+      buttonsDiv.innerHTML = '<p style="margin-top: 20px;">✅ Thanks for your vote!<br>We’ll announce the result Friday.</p>';
     }
 
     function renderVoting(cities) {
@@ -106,8 +105,7 @@
       }
     }
 
-    // Load JSON of locked cities and trigger render
-    fetch('City_Database.json')
+    fetch('City_Database_Slimmed.json')
       .then(response => response.json())
       .then(data => {
         const lockedCities = data.filter(item => item.Status === "locked").map(item => item.City);
