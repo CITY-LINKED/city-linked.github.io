@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
   <title>Dubai | CITY LINKED</title>
   <link href="https://fonts.googleapis.com/css2?family=Gruppo&display=swap" rel="stylesheet">
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -113,13 +113,13 @@
   </style>
 </head>
 <body>
-  <h1 class="city-name">
-<!-- Share Button -->
-<button onclick="shareCity()" style="position: absolute; top: 10px; left: 10px; background: none; border: none; cursor: pointer; z-index: 10;">
-  <i class="fa-solid fa-share-nodes" style="font-size: 22px; color: white;"></i>
-</button>
-Dubai</h1>
+  <h1 class="city-name">Dubai</h1>
 
+  <!-- Share Button -->
+    <button onclick="shareCity()" style="position: absolute; top: 10px; left: 10px; background: none; border: none; cursor: pointer; z-index: 10;">
+      <img src="/icons/share.svg" alt="Share" style="width: 24px; height: 24px;" />
+    </button>
+  
   <div class="card front">
     <div class="city-banner">CITY LINKED</div>
     <div class="top-icons-rounded">
@@ -156,13 +156,13 @@ Dubai</h1>
       </div>
     </div>
   </div>
-
-  <script>
+  
+   <script>
     function shareCity() {
       if (navigator.share) {
         navigator.share({
-          title: document.title,
-          text: 'Fast, curated travel tips on CITY LINKED.',
+          title: 'Check out Dubai on CITY LINKED',
+          text: 'Fast, curated travel tips for Dubai.',
           url: window.location.href
         }).catch((error) => console.log('Sharing failed', error));
       } else {
@@ -171,5 +171,4 @@ Dubai</h1>
     }
   </script>
 </body>
-
 </html>
