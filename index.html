@@ -22,6 +22,14 @@
       position: relative;
     }
 
+    .responsive-logo {
+  position: absolute;
+  top: clamp(20px, 8vh, 60px);
+  left: 50%;
+  transform: translateX(-50%);
+  height: clamp(40px, 6vw, 80px);
+    }
+    
     h1 {
       font-size: 3rem;
       margin-bottom: 10px;
@@ -89,7 +97,7 @@
   </style>
 </head>
 <body>
-  <img src="logo.png" alt="CITY LINKED Logo" style="height: 140px; position: absolute; top: 140px; left: 50%; transform: translateX(-50%);" />
+ <img src="logo.png" alt="CITY LINKED Logo" class="responsive-logo" />
 <h1>Plan Less. Explore More.</h1>
   <p>Your next trip simplified <br>
   Travel City Cards with everything you need to move smart, fast and freely.</p>
