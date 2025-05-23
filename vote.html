@@ -6,10 +6,51 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Vote to Unlock the Next City</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Gruppo&display=swap');
+    body {
+      font-family: 'Gruppo', sans-serif;
+    }
+    .vote-title {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: #ffffff;
+    }
+    .vote-subtitle {
+      font-size: 16px;
+      color: #cccccc;
+      margin-bottom: 30px;
+    }
+    .city-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    .city-card {
+      background-color: rgba(255, 255, 255, 0.88);
+      border: 2px solid #00B4DB;
+      border-radius: 12px;
+      padding: 20px 30px;
+      font-size: 18px;
+      color: #222;
+      cursor: pointer;
+      transition: 0.3s ease;
+      min-width: 140px;
+    }
+    .city-card:hover {
+      background-color: #ffffff;
+      color: white;
+    }
+    .thank-you-message {
+      margin-top: 30px;
+      font-size: 18px;
+      color: #ffffff;
+    }
     body {
       font-family: Arial, sans-serif;
-      background: #0e1a25;
-      color: white;
+      background: url('images/bg.jpg') no-repeat center center fixed; background-size: cover;
+      color: #222;
       text-align: center;
       padding: 40px;
     }
@@ -21,8 +62,8 @@
       margin: 10px;
       padding: 14px 24px;
       font-size: 16px;
-      background-color: #00B4DB;
-      color: white;
+      background-color: #ffffff;
+      color: #222;
       border: none;
       border-radius: 30px;
       cursor: pointer;
@@ -33,14 +74,14 @@
     .city-winner {
       font-size: 20px;
       margin-top: 30px;
-      color: #00ffcc;
+      color: #ffffff;
     }
   </style>
 </head>
 <body>
   <h1>🔓 Vote to Unlock the Next City</h1>
   <p>Tap your favorite — we'll unlock the most-voted city this Friday.</p>
-  <div id="city-buttons"></div>
+  <div class="vote-title">🌍 Vote to Unlock the Next City</div><div class="vote-subtitle">Choose your favorite – we’ll unlock one this Friday!</div><div id="city-buttons" class="city-container"></div>
   <div id="winner" class="city-winner"></div>
 
   <script>
