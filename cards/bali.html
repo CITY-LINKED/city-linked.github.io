@@ -159,5 +159,22 @@
     </div>
   </div>
 <script crossorigin="anonymous" src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+
+
+
+  <script>
+    function shareCity() {
+      if (navigator.share) {
+        navigator.share({
+          title: 'Check out Bali on CITY LINKED',
+          text: 'Fast, curated travel tips for Bali.',
+          url: window.location.href
+        }).catch((error) => console.log('Sharing failed', error));
+      } else {
+        alert("Sharing not supported on this device.");
+      }
+    }
+  </script>
 </body>
 </html>
