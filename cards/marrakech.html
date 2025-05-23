@@ -1,12 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
- <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-  <title>Marrakech | CITY LINKED</title>
-  <link href="https://fonts.googleapis.com/css2?family=Gruppo&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-  <style>
+<html><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0" name="viewport"/><title>Marrakech | CITY LINKED</title><link href="https://fonts.googleapis.com/css2?family=Gruppo&amp;display=swap" rel="stylesheet"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/><style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: Arial, sans-serif;
@@ -19,6 +12,8 @@
       height: 85vh;
     }
     .city-name {
+  right: 40px;
+
       position: absolute;
       top: 57px;
       right: 10px;
@@ -40,10 +35,10 @@
       overflow: hidden;
     }
     .front {
-      background-image: url('../images/marrakech.jpg');
+      background-image: url('../images/dubai.jpg');
     }
     .back {
-      background-image: url('../images/marrakech.jpg');
+      background-image: url('../images/dubai.jpg');
     }
     .city-banner {
       position: absolute;
@@ -58,6 +53,8 @@
       text-shadow: 0.5px -0.5px 0 white;
     }
     .top-icons-rounded {
+  max-width: 235px; /* prevent full width on PC */
+
       position: absolute;
       right: 0;
       width: 53%;
@@ -110,71 +107,82 @@
       font-size: 18px;
       margin-right: 5px;
     }
-  </style>
-</head>
-<body>
-  <h1 class="city-name">Marrakech</h1>
-
   
+/* Desktop fix: limit size */
+@media (min-width: 768px) {
+  .card {
+    width: 700px;
+    height: 350px;
+    margin: 20px auto;
+  }
+}
 
-<!-- Share Button -->
-<button onclick="shareCity()" style="position: absolute; top: 15px; left: 15px; background: none; border: none; cursor: pointer; z-index: 10;">
-  <i class="fas fa-share-alt" style="font-size: 26px; color: white;"></i>
-</button>
+.share-button {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+}
 
-<div class="card front">
-    <div class="city-banner">CITY LINKED</div>
-    <div class="top-icons-rounded">
-      <a href="https://www.google.com/maps/search/Marrakech+things+to+do" target="_blank"><i class="fas fa-landmark"></i></a>
-      <a href="https://www.google.com/maps/search/Marrakech+places+to+visit" target="_blank"><i class="fas fa-map"></i></a>
-      <a href="https://www.google.com/maps/search/Marrakech+restaurants" target="_blank"><i class="fas fa-utensils"></i></a>
-      <a href="https://www.google.com/maps/search/Marrakech+coffee+shops" target="_blank"><i class="fas fa-mug-hot"></i></a>
-      <a href="https://www.google.com/maps/search/Marrakech+bars" target="_blank"><i class="fas fa-beer"></i></a>
-    </div>
-  </div>
+@media (min-width: 768px) {
+  .share-button {
+    top: 88px;
+    left: calc(49% - 315px);
+  }
 
-  <div class="card back">
-    <div class="back-panel">
-      <div class="row">
-        <a href="https://www.google.com/maps/search/Marrakech+metro" target="_blank"><i class="fas fa-subway"></i>Metro</a>
-        <a href="https://www.google.com/maps/search/Marrakech+hotels" target="_blank"><i class="fas fa-bed"></i>Accommodation</a>
-        <a href="https://www.google.com/search?q=Marrakech+weather" target="_blank"><i class="fas fa-cloud-sun-rain"></i>Weather</a>
-      </div>
-      <div class="row">
-        <a href="https://www.google.com/maps/search/Marrakech+train+station" target="_blank"><i class="fas fa-train"></i>Train</a>
-        <a href="https://www.google.com/maps/search/Marrakech+ATM" target="_blank"><i class="fas fa-credit-card"></i>ATM</a>
-      </div>
-      <div class="row">
-        <a href="https://www.google.com/maps/search/Marrakech+car+rental" target="_blank"><i class="fas fa-car"></i>Rent-a-Car</a>
-        <a href="https://www.google.com/maps/search/Marrakech+motorcycle+rental" target="_blank"><i class="fas fa-motorcycle"></i>Motorcycle</a>
-      </div>
-      <div class="row">
-        <a href="https://www.google.com/maps/search/Marrakech+gas+station" target="_blank"><i class="fas fa-gas-pump"></i>Gas</a>
-      </div>
-      <div class="bottom-bar">
-        <a href="https://www.google.com/maps/search/Marrakech+pharmacies" target="_blank"><i class="fas fa-prescription-bottle"></i>Pharmacies</a>
-        <a href="https://www.google.com/maps/search/Marrakech+hospitals" target="_blank"><i class="fas fa-hospital"></i>Hospitals</a>
-        <a href="tel:19"><i class="fas fa-phone"></i>Emergency</a>
-      </div>
-    </div>
-  </div>
-<script crossorigin="anonymous" src="https://kit.fontawesome.com/a076d05399.js"></script>
-
-
-
-
-  <script>
+  .city-name {
+    top: 120px;
+    right: calc(51% - 345px);
+  }
+}
+</style></head><body><h1 class="city-name">Marrakech</h1><button class="share-button" onclick="shareCity()">
+<i class="fas fa-share-alt" style="font-size: 26px; color: white;"></i>
+</button><div class="card front" style="background-image: url('../images/marrakech.jpg');">
+<div class="city-banner">CITY LINKED</div>
+<div class="top-icons-rounded">
+<a href="https://www.google.com/maps/search/Dubai+things+to+do" target="_blank"><i class="fas fa-landmark"></i></a>
+<a href="https://www.google.com/maps/search/Dubai+places+to+visit" target="_blank"><i class="fas fa-map"></i></a>
+<a href="https://www.google.com/maps/search/Dubai+restaurants" target="_blank"><i class="fas fa-utensils"></i></a>
+<a href="https://www.google.com/maps/search/Dubai+coffee+shops" target="_blank"><i class="fas fa-mug-hot"></i></a>
+<a href="https://www.google.com/maps/search/Dubai+bars" target="_blank"><i class="fas fa-beer"></i></a>
+</div>
+</div><div class="card back">
+<div class="back-panel">
+<div class="row">
+<a href="https://www.google.com/maps/search/Dubai+metro" target="_blank"><i class="fas fa-subway"></i>Metro</a>
+<a href="https://www.google.com/maps/search/Dubai+hotels" target="_blank"><i class="fas fa-bed"></i>Accommodation</a>
+<a href="https://www.google.com/search?q=Dubai+weather" target="_blank"><i class="fas fa-cloud-sun-rain"></i>Weather</a>
+</div>
+<div class="row">
+<a href="https://www.google.com/maps/search/Dubai+train+station" target="_blank"><i class="fas fa-train"></i>Train</a>
+<a href="https://www.google.com/maps/search/Dubai+ATM" target="_blank"><i class="fas fa-credit-card"></i>ATM</a>
+</div>
+<div class="row">
+<a href="https://www.google.com/maps/search/Dubai+car+rental" target="_blank"><i class="fas fa-car"></i>Rent-a-Car</a>
+<a href="https://www.google.com/maps/search/Dubai+motorcycle+rental" target="_blank"><i class="fas fa-motorcycle"></i>Motorcycle</a>
+</div>
+<div class="row">
+<a href="https://www.google.com/maps/search/Dubai+gas+station" target="_blank"><i class="fas fa-gas-pump"></i>Gas</a>
+</div>
+<div class="bottom-bar">
+<a href="https://www.google.com/maps/search/Dubai+pharmacies" target="_blank"><i class="fas fa-prescription-bottle"></i>Pharmacies</a>
+<a href="https://www.google.com/maps/search/Dubai+hospitals" target="_blank"><i class="fas fa-hospital"></i>Hospitals</a>
+<a href="tel:19"><i class="fas fa-phone"></i>Emergency</a>
+</div>
+</div>
+</div><script>
     function shareCity() {
       if (navigator.share) {
         navigator.share({
-          title: 'Check out Marrakech on CITY LINKED',
-          text: 'Fast, curated travel tips for Marrakech.',
+          title: 'Check out Dubai on CITY LINKED',
+          text: 'Fast, curated travel tips for Dubai.',
           url: window.location.href
         }).catch((error) => console.log('Sharing failed', error));
       } else {
-        alert("Sharing not supported on this device.");
+        alert("Sharing is only supported on mobile browsers.");
       }
     }
-  </script>
-</body>
-</html>
+  </script></body></html>
