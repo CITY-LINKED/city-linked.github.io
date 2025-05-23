@@ -19,24 +19,15 @@
       height: 100vh;
       text-align: center;
       padding: 0 20px;
-      position: relative;
     }
 
-   .responsive-logo {
-      position: absolute;
-      top: clamp(80px, 18vh, 140px);
-      left: 50%;
-      transform: translateX(-50%);
-      height: clamp(80px, 12vw, 160px);
-    }
-    
     h1 {
       font-size: 3rem;
       margin-bottom: 10px;
     }
 
     p {
-      font-size: 1.2rem;
+      font-size: 1.4rem;
       max-width: 600px;
       margin-bottom: 30px;
     }
@@ -97,10 +88,10 @@
   </style>
 </head>
 <body>
- <img src="logo.png" alt="CITY LINKED Logo" class="responsive-logo" />
+  <img src="logo.png" alt="CITY LINKED Logo" style="height: 100px; position: absolute; top: 20px; left: 20px;" />
 <h1>Plan Less. Explore More.</h1>
-  <p>Your next trip simplified with Travel Cards <br>
-     Everything you need in one place to move smart, fast and freely.</p>
+  <p>Your next trip simplified! <br>
+    Travel City Cards with everything you need to move smart, fast, and freely.</p>
   <a href="homepage.html" class="cta">Choose Your City</a>
 
   <div id="viral-badge" class="badge" onclick="toggleTooltip()">🔥 Top cities unlock new themes</div>
