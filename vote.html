@@ -1,0 +1,118 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vote to Unlock the Next City</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0e1a25;
+      color: white;
+      text-align: center;
+      padding: 40px;
+    }
+    h1 {
+      margin-bottom: 10px;
+    }
+    .city-button {
+      display: inline-block;
+      margin: 10px;
+      padding: 14px 24px;
+      font-size: 16px;
+      background-color: #00B4DB;
+      color: white;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+    }
+    .city-button:hover {
+      background-color: #0091b0;
+    }
+    .city-winner {
+      font-size: 20px;
+      margin-top: 30px;
+      color: #00ffcc;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔓 Vote to Unlock the Next City</h1>
+  <p>Tap your favorite — we'll unlock the most-voted city this Friday.</p>
+  <div id="city-buttons"></div>
+  <div id="winner" class="city-winner"></div>
+
+  <script>
+    const day = new Date().getDay(); // 0 = Sun ... 5 = Fri
+    const buttonsDiv = document.getElementById("city-buttons");
+    const winnerDiv = document.getElementById("winner");
+
+    const votes = JSON.parse(localStorage.getItem("votes")) || {};
+    const voted = localStorage.getItem("voted") === "true";
+    let weeklyCities = JSON.parse(localStorage.getItem("weeklyCities"));
+
+    function shuffle(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    function castVote(city) {
+      if (voted) {
+        alert("You already voted this week!");
+        return;
+      }
+      votes[city] = (votes[city] || 0) + 1;
+      localStorage.setItem("votes", JSON.stringify(votes));
+      localStorage.setItem("voted", "true");
+      alert("Thanks! Your vote has been counted.");
+      location.reload();
+    }
+
+    function renderVoting(cities) {
+      if (!weeklyCities || day === 1) {
+        weeklyCities = shuffle(cities).slice(0, 5);
+        localStorage.setItem("weeklyCities", JSON.stringify(weeklyCities));
+        localStorage.setItem("votes", JSON.stringify({}));
+        localStorage.setItem("voted", "false");
+      }
+
+      if (day < 5) {
+        weeklyCities.forEach(city => {
+          const btn = document.createElement("button");
+          btn.className = "city-button";
+          btn.textContent = city;
+          btn.onclick = () => castVote(city);
+          buttonsDiv.appendChild(btn);
+        });
+      } else if (day === 5) {
+        let topCity = null;
+        let maxVotes = -1;
+        for (let city of weeklyCities) {
+          const count = votes[city] || 0;
+          if (count > maxVotes) {
+            maxVotes = count;
+            topCity = city;
+          }
+        }
+        winnerDiv.innerHTML = topCity
+          ? `🎉 <strong>${topCity}</strong> has been unlocked!`
+          : "No votes yet. Be sure to vote next week!";
+      } else {
+        winnerDiv.innerText = "Voting resumes Monday with 5 new cities!";
+      }
+    }
+
+    // Load JSON of locked cities and trigger render
+    fetch('City_Database.json')
+      .then(response => response.json())
+      .then(data => {
+        const lockedCities = data.filter(item => item.Status === "locked").map(item => item.City);
+        renderVoting(lockedCities);
+      });
+  </script>
+</body>
+</html>
