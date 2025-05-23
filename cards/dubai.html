@@ -110,16 +110,27 @@
       font-size: 18px;
       margin-right: 5px;
     }
-  </style>
+  
+/* Desktop fix: limit size */
+@media (min-width: 768px) {
+  .card {
+    width: 700px;
+    height: 350px;
+    margin: 20px auto;
+  }
+}
+
+</style>
 </head>
 <body>
   <h1 class="city-name">Dubai</h1>
 
-  <!-- Share Button -->
-    <button onclick="shareCity()" style="position: absolute; top: 15px; left: 15px; background: none; border: none; cursor: pointer; z-index: 10;">
-      <i class="fas fa-share-alt" style="font-size: 26px; color: white;"></i>
-    </button>
-  
+<!-- Share Button -->
+<button onclick="shareCity()" style="position: absolute; top: 15px; left: 15px; background: none; border: none; cursor: pointer; z-index: 10;">
+  <i class="fas fa-share-alt" style="font-size: 26px; color: white;"></i>
+</button>
+
+
   <div class="card front">
     <div class="city-banner">CITY LINKED</div>
     <div class="top-icons-rounded">
@@ -156,8 +167,8 @@
       </div>
     </div>
   </div>
-  
-   <script>
+
+  <script>
     function shareCity() {
       if (navigator.share) {
         navigator.share({
