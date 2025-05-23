@@ -168,6 +168,8 @@
     </div>
   </div>
 
+  
+
   <script>
     function shareCity() {
       if (navigator.share) {
@@ -177,7 +179,7 @@
           url: window.location.href
         }).catch((error) => console.log('Sharing failed', error));
       } else {
-        alert("Sharing not supported on this device.");
+        alert("Sharing is only supported on mobile browsers.");
       }
     }
   </script>
