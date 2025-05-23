@@ -115,7 +115,14 @@
 <body>
   <h1 class="city-name">Auckland</h1>
 
-  <div class="card front">
+  
+
+<!-- Share Button -->
+<button onclick="shareCity()" style="position: absolute; top: 15px; left: 15px; background: none; border: none; cursor: pointer; z-index: 10;">
+  <i class="fas fa-share-alt" style="font-size: 26px; color: white;"></i>
+</button>
+
+<div class="card front">
     <div class="city-banner">CITY LINKED</div>
     <div class="top-icons-rounded">
       <a href="https://www.google.com/maps/search/Auckland+things+to+do" target="_blank"><i class="fas fa-landmark"></i></a>
@@ -151,5 +158,23 @@
       </div>
     </div>
   </div>
+<script crossorigin="anonymous" src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+
+
+
+  <script>
+    function shareCity() {
+      if (navigator.share) {
+        navigator.share({
+          title: 'Check out Auckland on CITY LINKED',
+          text: 'Fast, curated travel tips for Auckland.',
+          url: window.location.href
+        }).catch((error) => console.log('Sharing failed', error));
+      } else {
+        alert("Sharing not supported on this device.");
+      }
+    }
+  </script>
 </body>
 </html>
