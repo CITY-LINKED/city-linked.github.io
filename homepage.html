@@ -65,27 +65,27 @@
     }
 
     .cards-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, auto));
-  gap: 16px;
-  justify-content: center;
-  padding: 0 16px;
-  max-width: 1000px;
-  margin: 0 auto;
-}
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, auto));
+      gap: 16px;
+      justify-content: center;
+      padding: 0 16px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
 
     .card-preview {
-  width: 150px;
-  height: 100px;
-  border-radius: 10px;
-  background-size: cover;
-  background-position: center;
-  border: 2px solid white;
-  position: relative;
-  overflow: hidden;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
+      width: 150px;
+      height: 100px;
+      border-radius: 10px;
+      background-size: cover;
+      background-position: center;
+      border: 2px solid white;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
 
     .card-preview:hover {
       transform: scale(1.05);
@@ -112,6 +112,7 @@
       .then(function() { console.log("Service Worker Registered"); });
   }
 </script>
+    
 <!-- Google Analytics -->
 <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-5HCQPECLE0"></script>
 <script>
@@ -121,6 +122,7 @@
   gtag('config', 'G-5HCQPECLE0');
 </script>
 </head>
+    
 <body>
 <header style="display: flex; align-items: center; padding: 10px 20px; background: linear-gradient(to right, #006A8F, #00A9CC);">
 <img alt="City Linked Logo" src="logo.png" style="height: 60px; margin-right: 15px;"/>
@@ -138,8 +140,8 @@
 -->
     
 <h1 style="font-size: 22px; font-weight: normal; text-align: center; color: white; margin-top: 10px;">Choose your destination</h1>
-<div style="text-align: center; font-size: 16px; color: white; margin-top: 10px;">
-  Smart travel cards — no apps, no accounts. Just clean, fast city info.
+<div style="text-align: center; font-size: 12px; color: white; margin-top: 2px;">
+  Smart travel cards — Fast city info at your fingertips.
 </div>
 <div class="tabs">
 <div class="tab active" onclick="filterCards('all')">All</div>
