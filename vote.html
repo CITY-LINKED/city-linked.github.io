@@ -149,7 +149,7 @@
       }
     }
 
-    fetch('City_Database_Slimmed.json')
+    fetch('City_Database.json')
       .then(response => response.json())
       .then(data => {
         const lockedCities = data.filter(item => item.Status === "locked").map(item => item.City);
