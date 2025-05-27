@@ -9,6 +9,11 @@
     @import url('https://fonts.googleapis.com/css2?family=Gruppo&display=swap');
     body {
       font-family: 'Gruppo', sans-serif;
+      background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('images/bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #1a1a1a;
+      text-align: center;
+      padding: 40px;
     }
     .vote-title {
       font-size: 28px;
@@ -27,7 +32,7 @@
       gap: 20px;
       margin-bottom: 30px;
     }
-    .city-card {
+    .city-button {
       background-color: rgba(255, 255, 255, 0.92);
       border: 2px solid #00B4DB;
       border-radius: 12px;
@@ -38,39 +43,9 @@
       transition: 0.3s ease;
       min-width: 140px;
     }
-    .city-card:hover {
+    .city-button:hover {
       background-color: #ffffff;
       color: white;
-    }
-    .thank-you-message {
-      margin-top: 30px;
-      font-size: 18px;
-      color: #ffffff;
-    }
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('images/bg.jpg') no-repeat center center fixed;
-    background-size: cover;
-      color: #1a1a1a;
-      text-align: center;
-      padding: 40px;
-    }
-    h1 {
-      margin-bottom: 10px;
-    }
-    .city-button {
-      display: inline-block;
-      margin: 10px;
-      padding: 14px 24px;
-      font-size: 16px;
-      background-color: #ffffff;
-      color: #1a1a1a;
-      border: none;
-      border-radius: 30px;
-      cursor: pointer;
-    }
-    .city-button:hover {
-      background-color: #0091b0;
     }
     .city-winner {
       font-size: 20px;
@@ -84,11 +59,12 @@
   <div class="vote-subtitle">Choose your favorite! <br> 
     It might just be the next to open. <br> <br>
     5 cities drop every Monday. <br>
-    We will unlock the most-voted city this Friday!</div><div id="city-buttons" class="city-container"></div>
+    We will unlock the most-voted city this Friday!</div>
+  <div id="city-buttons" class="city-container"></div>
   <div id="winner" class="city-winner"></div>
 
   <script>
-    const day = new Date().getDay(); // 0 = Sun ... 5 = Fri
+    const day = new Date().getDay(); // 0 = Sun ... 6 = Sat
     const buttonsDiv = document.getElementById("city-buttons");
     const winnerDiv = document.getElementById("winner");
 
@@ -117,13 +93,13 @@
 
     function renderVoting(cities) {
       if (!weeklyCities || day === 1) {
-        weeklyCities = shuffle(cities).slice(0, 5);
+        weeklyCities = cities;
         localStorage.setItem("weeklyCities", JSON.stringify(weeklyCities));
         localStorage.setItem("votes", JSON.stringify({}));
         localStorage.setItem("voted", "false");
       }
 
-      if (day < 5) {
+      if (day >= 1 && day <= 4) {
         weeklyCities.forEach(city => {
           const btn = document.createElement("button");
           btn.className = "city-button";
@@ -152,8 +128,12 @@
     fetch('City_Database.json')
       .then(response => response.json())
       .then(data => {
-        const lockedCities = data.filter(item => item.Status === "locked").map(item => item.City);
-        renderVoting(lockedCities);
+        const tier1 = shuffle(data.filter(c => c.Status === "locked" && c.Tier === "tier 1")).slice(0, 1);
+        const tier2 = shuffle(data.filter(c => c.Status === "locked" && c.Tier === "tier 2")).slice(0, 1);
+        const tier3 = shuffle(data.filter(c => c.Status === "locked" && c.Tier === "tier 3")).slice(0, 1);
+        const minor = shuffle(data.filter(c => c.Status === "locked" && c.Tier === "minor")).slice(0, 2);
+        const selectedCities = [...tier1, ...tier2, ...tier3, ...minor].map(c => c.City);
+        renderVoting(selectedCities);
       });
   </script>
 </body>
