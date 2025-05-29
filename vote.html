@@ -11,7 +11,7 @@
       font-family: 'Gruppo', sans-serif;
       background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('images/bg.jpg') no-repeat center center fixed;
       background-size: cover;
-      color: #1a1a1a;
+      color: #ffffff;
       text-align: center;
       padding: 40px;
     }
@@ -56,85 +56,51 @@
 </head>
 <body>
   <div class="vote-title">🌍 Unlock the Next City!</div>
-  <div class="vote-subtitle">Choose your favorite! <br> 
-    It might just be the next to open. <br> <br>
-    5 cities drop every Monday. <br>
-    We will unlock the most-voted city this Friday!</div>
+  <div class="vote-subtitle">Choose your favorite!<br>We’ll announce the winner this Friday.</div>
   <div id="city-buttons" class="city-container"></div>
   <div id="winner" class="city-winner"></div>
 
   <script>
-    const day = new Date().getDay(); // 0 = Sun ... 6 = Sat
-    const buttonsDiv = document.getElementById("city-buttons");
-    const winnerDiv = document.getElementById("winner");
+    const scriptURL = "PASTE_YOUR_WEB_APP_URL_HERE"; // Replace this with your Web App URL
+    const userId = getOrCreateUserId();
 
-    const votes = JSON.parse(localStorage.getItem("votes")) || {};
-    const voted = localStorage.getItem("voted") === "true";
-    let weeklyCities = JSON.parse(localStorage.getItem("weeklyCities"));
-
-    function shuffle(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-      return array;
-    }
+    fetch(scriptURL)
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === "frozen") {
+          document.getElementById("city-buttons").innerHTML = "<p>Voting is closed. Come back Monday!</p>";
+        } else if (data.status === "open") {
+          data.cities.forEach(city => {
+            const btn = document.createElement("button");
+            btn.className = "city-button";
+            btn.textContent = city;
+            btn.onclick = () => castVote(city);
+            document.getElementById("city-buttons").appendChild(btn);
+          });
+        }
+      });
 
     function castVote(city) {
-      if (voted) {
-        alert("You already voted this week!");
-        return;
-      }
-      votes[city] = (votes[city] || 0) + 1;
-      localStorage.setItem("votes", JSON.stringify(votes));
-      localStorage.setItem("voted", "true");
-      buttonsDiv.innerHTML = '<p style="margin-top: 20px;">✅ Thanks for your vote!<br>We’ll announce the result Friday.</p>';
-    }
-
-    function renderVoting(cities) {
-      if (!weeklyCities || day === 1) {
-        weeklyCities = cities;
-        localStorage.setItem("weeklyCities", JSON.stringify(weeklyCities));
-        localStorage.setItem("votes", JSON.stringify({}));
-        localStorage.setItem("voted", "false");
-      }
-
-      if (day >= 1 && day <= 4) {
-        weeklyCities.forEach(city => {
-          const btn = document.createElement("button");
-          btn.className = "city-button";
-          btn.textContent = city;
-          btn.onclick = () => castVote(city);
-          buttonsDiv.appendChild(btn);
-        });
-      } else if (day === 5) {
-        let topCity = null;
-        let maxVotes = -1;
-        for (let city of weeklyCities) {
-          const count = votes[city] || 0;
-          if (count > maxVotes) {
-            maxVotes = count;
-            topCity = city;
-          }
-        }
-        winnerDiv.innerHTML = topCity
-          ? `🎉 <strong>${topCity}</strong> has been unlocked!`
-          : "No votes yet. Be sure to vote next week!";
-      } else {
-        winnerDiv.innerText = "Voting resumes Monday with 5 new cities!";
-      }
-    }
-
-    fetch('City_Database.json')
-      .then(response => response.json())
+      fetch(scriptURL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, city })
+      })
+      .then(res => res.json())
       .then(data => {
-        const tier1 = shuffle(data.filter(c => c.Status === "locked" && c.Tier === "tier 1")).slice(0, 1);
-        const tier2 = shuffle(data.filter(c => c.Status === "locked" && c.Tier === "tier 2")).slice(0, 1);
-        const tier3 = shuffle(data.filter(c => c.Status === "locked" && c.Tier === "tier 3")).slice(0, 1);
-        const minor = shuffle(data.filter(c => c.Status === "locked" && c.Tier === "minor")).slice(0, 2);
-        const selectedCities = [...tier1, ...tier2, ...tier3, ...minor].map(c => c.City);
-        renderVoting(selectedCities);
+        document.getElementById("city-buttons").innerHTML = `<p>✅ ${data.message}</p>`;
       });
+    }
+
+    function getOrCreateUserId() {
+      const key = "CLVoteUserID";
+      let id = localStorage.getItem(key);
+      if (!id) {
+        id = "user_" + Math.random().toString(36).substring(2, 10);
+        localStorage.setItem(key, id);
+      }
+      return id;
+    }
   </script>
 </body>
 </html>
