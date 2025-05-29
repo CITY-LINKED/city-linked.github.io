@@ -18,6 +18,7 @@
     .vote-title {
       font-size: 28px;
       margin-bottom: 20px;
+      color: #ffffff;
     }
     .vote-subtitle {
       font-size: 16px;
@@ -50,6 +51,20 @@
       font-size: 20px;
       color: #ffffff;
     }
+    .admin-controls {
+      margin-top: 30px;
+      border: 1px solid #00B4DB;
+      padding: 15px;
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.4);
+    }
+    .admin-controls button {
+      margin: 5px;
+      padding: 10px 15px;
+      font-size: 14px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -57,43 +72,85 @@
   <div class="vote-subtitle">Choose your favorite!<br>We’ll announce the winner this Friday.</div>
   <div id="city-buttons" class="city-container"></div>
   <div id="thank-you" class="thank-you"></div>
+  <div id="admin-panel" class="admin-controls" style="display:none;">
+    <h3>🛠 Admin Panel</h3>
+    <button onclick="generateNewCities()">🔄 Generate New 5 Cities</button>
+    <button onclick="add100Votes()">💯 Add 100 Votes to Others</button>
+    <button onclick="announceWinner()">🏆 Announce Winner</button>
+    <button onclick="resetAll()">♻️ Reset Everything</button>
+  </div>
 
   <script>
-    const votedKey = "CL_Voted_This_Week";
-    const voted = localStorage.getItem(votedKey);
-    const dataURL = "https://CITY-LINKED.github.io/city-linked-data/weekly_cities.json";
+    const adminKey = "710887";
+    const urlParams = new URLSearchParams(window.location.search);
+    const isAdmin = urlParams.get("admin") === adminKey;
+    if (isAdmin) localStorage.setItem("CLAdminOverride", "true");
 
-    if (voted) {
-      document.getElementById("thank-you").innerText = "✅ You've already voted this week!";
+    const userId = getOrCreateUserId();
+    const backendURL = "https://script.google.com/macros/s/AKfycbyWmKM6a2fWKjJEvtDeO6qOXuIlACk5SsQBGbhvnBBORWF2ZZwaXntxQd9wnPQGTN8R/exec";
+    const jsonURL = "https://CITY-LINKED.github.io/city-linked-data/weekly_cities.json";
+    const hasVoted = localStorage.getItem("votedThisWeek");
+    const adminOverride = localStorage.getItem("CLAdminOverride") === "true";
+
+    if (hasVoted && !adminOverride) {
+      document.getElementById("thank-you").innerText = "✅ You've already voted this week. Come back next Monday!";
     } else {
-      fetch(dataURL)
+      fetch(jsonURL)
         .then(res => res.json())
         .then(data => {
-          if (data.cities && data.cities.length > 0) {
-            data.cities.forEach(city => {
-              const btn = document.createElement("button");
-              btn.className = "city-button";
-              btn.textContent = city;
-              btn.onclick = () => recordVote(city);
-              document.getElementById("city-buttons").appendChild(btn);
-            });
-          } else {
-            document.getElementById("thank-you").innerText = "⚠️ Voting not available at the moment.";
-          }
+          const container = document.getElementById("city-buttons");
+          data.cities.forEach(city => {
+            const btn = document.createElement("button");
+            btn.className = "city-button";
+            btn.textContent = city;
+            btn.onclick = () => castVote(city);
+            container.appendChild(btn);
+          });
         });
     }
 
-    function recordVote(city) {
-      localStorage.setItem(votedKey, "true");
-      document.getElementById("city-buttons").innerHTML = "";
-      document.getElementById("thank-you").innerText = `✅ Vote for ${city} saved!`;
+    if (adminOverride) {
+      document.getElementById("admin-panel").style.display = "block";
+    }
 
-      // Send vote to GitHub webhook (to be set up in GitHub Actions)
-      fetch("https://your-webhook-url-goes-here", {
+    function castVote(city) {
+      fetch(backendURL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ city: city })
+        body: JSON.stringify({ userId, city })
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("city-buttons").innerHTML = "";
+        document.getElementById("thank-you").innerText = "✅ " + data.message;
+        if (!adminOverride) localStorage.setItem("votedThisWeek", "true");
       });
+    }
+
+    function getOrCreateUserId() {
+      const key = "CLVoteUserID";
+      let id = localStorage.getItem(key);
+      if (!id) {
+        id = "user_" + Math.random().toString(36).substring(2, 10);
+        localStorage.setItem(key, id);
+      }
+      return id;
+    }
+
+    function generateNewCities() {
+      alert("🔄 Simulating 5 new cities (logic to be implemented)");
+    }
+
+    function add100Votes() {
+      alert("💯 Simulating +100 votes to remaining cities (logic to be implemented)");
+    }
+
+    function announceWinner() {
+      alert("🏆 Simulating winner announcement (logic to be implemented)");
+    }
+
+    function resetAll() {
+      alert("♻️ Resetting everything (logic to be implemented)");
     }
   </script>
 </body>
