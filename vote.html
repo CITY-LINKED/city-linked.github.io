@@ -61,35 +61,22 @@
   <div id="winner" class="city-winner"></div>
 
   <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbx4p1pHZbWjNcG0As8DdqkZejPYRljWmEgEbmlU3QIwy57s9zGd65QxHIKFhVWpdUd5/exec"; // Replace this with your Web App URL
     const userId = getOrCreateUserId();
 
-    fetch(scriptURL)
+    fetch("https://raw.githubusercontent.com/CITY-LINKED/city-linked-data/main/weekly_cities.json")
       .then(res => res.json())
       .then(data => {
-        if (data.status === "frozen") {
-          document.getElementById("city-buttons").innerHTML = "<p>Voting is closed. Come back Monday!</p>";
-        } else if (data.status === "open") {
-          data.cities.forEach(city => {
-            const btn = document.createElement("button");
-            btn.className = "city-button";
-            btn.textContent = city;
-            btn.onclick = () => castVote(city);
-            document.getElementById("city-buttons").appendChild(btn);
-          });
-        }
+        data.cities.forEach(city => {
+          const btn = document.createElement("button");
+          btn.className = "city-button";
+          btn.textContent = city;
+          btn.onclick = () => castVote(city);
+          document.getElementById("city-buttons").appendChild(btn);
+        });
       });
 
     function castVote(city) {
-      fetch(scriptURL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, city })
-      })
-      .then(res => res.json())
-      .then(data => {
-        document.getElementById("city-buttons").innerHTML = `<p>✅ ${data.message}</p>`;
-      });
+      alert("✅ Vote for " + city + " recorded. (Static mode: Not saved)");
     }
 
     function getOrCreateUserId() {
