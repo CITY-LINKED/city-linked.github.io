@@ -47,9 +47,8 @@
       background-color: #ffffff;
       color: white;
     }
-    .city-winner {
+    .thank-you {
       font-size: 20px;
-      margin-top: 30px;
       color: #ffffff;
     }
   </style>
@@ -58,25 +57,44 @@
   <div class="vote-title">🌍 Unlock the Next City!</div>
   <div class="vote-subtitle">Choose your favorite!<br>We’ll announce the winner this Friday.</div>
   <div id="city-buttons" class="city-container"></div>
-  <div id="winner" class="city-winner"></div>
+  <div id="thank-you" class="thank-you"></div>
 
   <script>
     const userId = getOrCreateUserId();
+    const backendURL = "https://script.google.com/macros/s/AKfycbyWmKM6a2fWKjJEvtDeO6qOXuIlACk5SsQBGbhvnBBORWF2ZZwaXntxQd9wnPQGTN8R/exec";
+    const jsonURL = "https://CITY-LINKED.github.io/city-linked-data/weekly_cities.json";
 
-    fetch("https://CITY-LINKED.github.io/city-linked-data/weekly_cities.json")
-      .then(res => res.json())
-      .then(data => {
-        data.cities.forEach(city => {
-          const btn = document.createElement("button");
-          btn.className = "city-button";
-          btn.textContent = city;
-          btn.onclick = () => castVote(city);
-          document.getElementById("city-buttons").appendChild(btn);
+    const hasVoted = localStorage.getItem("votedThisWeek");
+
+    if (hasVoted) {
+      document.getElementById("thank-you").innerText = "✅ You've already voted this week. Come back next Monday!";
+    } else {
+      fetch(jsonURL)
+        .then(res => res.json())
+        .then(data => {
+          const container = document.getElementById("city-buttons");
+          data.cities.forEach(city => {
+            const btn = document.createElement("button");
+            btn.className = "city-button";
+            btn.textContent = city;
+            btn.onclick = () => castVote(city);
+            container.appendChild(btn);
+          });
         });
-      });
+    }
 
     function castVote(city) {
-      alert("✅ Vote for " + city + " recorded. (Static mode: Not saved)");
+      fetch(backendURL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, city })
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("city-buttons").innerHTML = "";
+        document.getElementById("thank-you").innerText = "✅ " + data.message;
+        localStorage.setItem("votedThisWeek", "true");
+      });
     }
 
     function getOrCreateUserId() {
