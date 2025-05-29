@@ -63,7 +63,7 @@
   <script>
     const userId = getOrCreateUserId();
 
-    fetch("https://raw.githubusercontent.com/CITY-LINKED/city-linked-data/main/weekly_cities.json")
+    fetch("https://CITY-LINKED.github.io/city-linked-data/weekly_cities.json")
       .then(res => res.json())
       .then(data => {
         data.cities.forEach(city => {
