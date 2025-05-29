@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,7 +18,6 @@
     .vote-title {
       font-size: 28px;
       margin-bottom: 20px;
-      color: #ffffff;
     }
     .vote-subtitle {
       font-size: 16px;
@@ -59,51 +59,41 @@
   <div id="thank-you" class="thank-you"></div>
 
   <script>
-    const userId = getOrCreateUserId();
-    const backendURL = "https://script.google.com/macros/s/AKfycbyWmKM6a2fWKjJEvtDeO6qOXuIlACk5SsQBGbhvnBBORWF2ZZwaXntxQd9wnPQGTN8R/exec";
-    const jsonURL = "https://CITY-LINKED.github.io/city-linked-data/weekly_cities.json";
+    const votedKey = "CL_Voted_This_Week";
+    const voted = localStorage.getItem(votedKey);
+    const dataURL = "https://CITY-LINKED.github.io/city-linked-data/weekly_cities.json";
 
-    const hasVoted = localStorage.getItem("votedThisWeek");
-
-    if (hasVoted) {
-      document.getElementById("thank-you").innerText = "✅ You've already voted this week. Come back next Monday!";
+    if (voted) {
+      document.getElementById("thank-you").innerText = "✅ You've already voted this week!";
     } else {
-      fetch(jsonURL)
+      fetch(dataURL)
         .then(res => res.json())
         .then(data => {
-          const container = document.getElementById("city-buttons");
-          data.cities.forEach(city => {
-            const btn = document.createElement("button");
-            btn.className = "city-button";
-            btn.textContent = city;
-            btn.onclick = () => castVote(city);
-            container.appendChild(btn);
-          });
+          if (data.cities && data.cities.length > 0) {
+            data.cities.forEach(city => {
+              const btn = document.createElement("button");
+              btn.className = "city-button";
+              btn.textContent = city;
+              btn.onclick = () => recordVote(city);
+              document.getElementById("city-buttons").appendChild(btn);
+            });
+          } else {
+            document.getElementById("thank-you").innerText = "⚠️ Voting not available at the moment.";
+          }
         });
     }
 
-    function castVote(city) {
-      fetch(backendURL, {
+    function recordVote(city) {
+      localStorage.setItem(votedKey, "true");
+      document.getElementById("city-buttons").innerHTML = "";
+      document.getElementById("thank-you").innerText = `✅ Vote for ${city} saved!`;
+
+      // Send vote to GitHub webhook (to be set up in GitHub Actions)
+      fetch("https://your-webhook-url-goes-here", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, city })
-      })
-      .then(res => res.json())
-      .then(data => {
-        document.getElementById("city-buttons").innerHTML = "";
-        document.getElementById("thank-you").innerText = "✅ " + data.message;
-        localStorage.setItem("votedThisWeek", "true");
+        body: JSON.stringify({ city: city })
       });
-    }
-
-    function getOrCreateUserId() {
-      const key = "CLVoteUserID";
-      let id = localStorage.getItem(key);
-      if (!id) {
-        id = "user_" + Math.random().toString(36).substring(2, 10);
-        localStorage.setItem(key, id);
-      }
-      return id;
     }
   </script>
 </body>
