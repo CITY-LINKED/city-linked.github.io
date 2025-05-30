@@ -167,8 +167,7 @@ function generateNewCities() {
       }
     })
   }).then(() => {
-    document.getElementById("thank-you").innerText = "✅ Cities are being generated... refreshing shortly.";
-    setTimeout(() => location.reload(), 6000);
+    setTimeout(refreshCityButtons, 4000);
   });
 }
 
