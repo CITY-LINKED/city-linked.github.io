@@ -90,6 +90,15 @@
     const backendURL = "https://script.google.com/macros/s/AKfycbyWmKM6a2fWKjJEvtDeO6qOXuIlACk5SsQBGbhvnBBORWF2ZZwaXntxQd9wnPQGTN8R/exec";
     const jsonURL = "https://CITY-LINKED.github.io/city-linked-data/weekly_cities.json";
     const hasVoted = localStorage.getItem("votedThisWeek");
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const isAdmin = urlParams.get('admin') === '710887';
+
+    if (!isAdmin) {
+      document.getElementById("thank-you").innerText = "🕒 Voting starts soon. Come back Monday!";
+      return;
+    }
+
     const adminOverride = localStorage.getItem("CLAdminOverride") === "true";
 
     if (hasVoted && !adminOverride) {
