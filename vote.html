@@ -137,9 +137,39 @@
       return id;
     }
 
-    function generateNewCities() {
-      alert("🔄 Simulating 5 new cities (logic to be implemented)");
-    }
+    function refreshCityButtons() {
+  fetch(jsonURL)
+    .then(res => res.json())
+    .then(data => {
+      const container = document.getElementById("city-buttons");
+      container.innerHTML = "";
+      data.cities.forEach(city => {
+        const btn = document.createElement("button");
+        btn.className = "city-button";
+        btn.textContent = city;
+        btn.onclick = () => castVote(city);
+        container.appendChild(btn);
+      });
+    });
+}
+
+function generateNewCities() {
+  fetch('https://api.github.com/repos/CITY-LINKED/city-linked-data/actions/workflows/admin-tools.yml/dispatches', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Bearer YOUR_GITHUB_TOKEN',
+      'Accept': 'application/vnd.github.v3+json'
+    },
+    body: JSON.stringify({
+      ref: 'main',
+      inputs: {
+        action: 'generate_new_cities'
+      }
+    })
+  }).then(() => {
+    setTimeout(refreshCityButtons, 4000);
+  });
+}
 
     function add100Votes() {
       alert("💯 Simulating +100 votes to remaining cities (logic to be implemented)");
