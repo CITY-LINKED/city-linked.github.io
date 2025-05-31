@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Vote to Unlock the Next City</title>
-<style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vote to Unlock the Next City</title>
+  <style>
     @import url('https://fonts.googleapis.com/css2?family=Gruppo&display=swap');
     body {
       font-family: 'Gruppo', sans-serif;
@@ -78,29 +77,15 @@
       background-color: #ffaa00;
       color: #000;
     }
-  
-    .admin-buttons-fixed {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      background-color: rgba(0,0,0,0.7);
-      padding: 16px;
-      border-radius: 12px;
-      z-index: 1000;
-      width: fit-content;
-    }
-</style>
+  </style>
 </head>
 <body>
-<div class="vote-title">🌍 Unlock The Next City</div>
-<div class="vote-subtitle">Tap your favorite — and help unlock a new city this Friday.</div>
-<div class="city-container" id="city-buttons"></div>
-<div class="thank-you" id="thank-you"></div>
-<script>
+  <div class="vote-title">🌍 Unlock The Next City</div>
+  <div class="vote-subtitle">Tap your favorite — and help unlock a new city this Friday.</div>
+  <div id="city-buttons" class="city-container"></div>
+  <div id="thank-you" class="thank-you"></div>
+
+  <script>
     const urlParams = new URLSearchParams(window.location.search);
     const isAdmin = urlParams.get("admin") === "710887";
     const userId = getOrCreateUserId();
@@ -164,7 +149,7 @@
 
     function showAdminButtons() {
       const adminDiv = document.createElement("div");
-      adminDiv.className = "admin-buttons-fixed";
+      adminDiv.className = "admin-buttons";
 
       const generateBtn = createAdminButton("🔄 Generate 5 Cities", "generate_cities");
       const announceBtn = createAdminButton("🏆 Announce Winner", "announce_winner");
