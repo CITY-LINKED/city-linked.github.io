@@ -1,199 +1,74 @@
-<!DOCTYPE html>
 
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Vote to Unlock the Next City</title>
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Gruppo&display=swap');
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vote to Unlock the Next City</title>
+  <style>
     body {
-      font-family: 'Gruppo', sans-serif;
-      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/bg.jpg') no-repeat center center fixed;
-      background-size: cover;
-      color: #ffffff;
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      color: #333;
       text-align: center;
-      padding: 40px 20px;
+      padding: 40px;
     }
     .vote-title {
-      font-size: 32px;
-      margin-bottom: 10px;
-    }
-    .vote-subtitle {
-      font-size: 18px;
-      color: #dddddd;
-      margin-bottom: 30px;
-    }
-    .city-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
-      margin-bottom: 30px;
+      font-size: 28px;
+      margin-bottom: 20px;
     }
     .city-button {
-      background: white;
+      background-color: #ffffff;
       border: 2px solid #00B4DB;
-      border-radius: 14px;
-      padding: 18px 24px;
+      border-radius: 12px;
+      padding: 20px 30px;
       font-size: 18px;
-      font-weight: bold;
-      color: #000000;
+      margin: 10px;
       cursor: pointer;
-      transition: transform 0.15s, background-color 0.3s;
-      min-width: 160px;
-    }
-    .city-button:hover {
-      background-color: #e6faff;
-      transform: scale(1.04);
     }
     .thank-you {
       font-size: 20px;
-      color: #ffffff;
-      margin-top: 20px;
-    }
-    .admin-buttons {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 12px;
-      max-width: 700px;
-      margin: 140px auto 0;
-    }
-    .admin-button {
-      background-color: #00B4DB;
-      border: none;
-      border-radius: 12px;
-      padding: 14px;
-      font-size: 14px;
-      font-weight: bold;
-      color: #fff;
-      cursor: pointer;
-      transition: background-color 0.3s, transform 0.2s;
-    }
-    .admin-button:hover {
-      background-color: #0093af;
-      transform: scale(1.04);
-    }
-    .admin-button.active {
-      background-color: #ffaa00;
-      color: #000;
+      margin-top: 30px;
+      color: green;
     }
   </style>
 </head>
 <body>
-<div class="vote-title">🌍 Unlock The Next City</div>
-<div class="vote-subtitle">Tap your favorite — and help unlock a new city this Friday.</div>
-<div class="city-container" id="city-buttons">
-<button class="city-button">Lisbon</button>
-<button class="city-button">Tokyo</button>
-<button class="city-button">New York</button>
-<button class="city-button">Cairo</button>
-<button class="city-button">Bangkok</button>
-</div>
-<div class="thank-you" id="thank-you"></div>
-<div class="admin-buttons" id="admin-section" style="display: none;">
-<button class="admin-button">➕ Boost Mode (100)</button>
-<button class="admin-button">🏆 Announce Winner</button>
-<button class="admin-button">🔄 Generate 5 Cities</button>
-<button class="admin-button">🧹 Reset All</button>
-</div>
-<script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const isAdmin = urlParams.get("admin") === "710887";
-    if (isAdmin) {
-      document.getElementById("admin-section").style.display = "grid";
-    }
-  </script>
-<script>
-const userId = getOrCreateUserId();
-const isAdmin = new URLSearchParams(window.location.search).get("admin") === "710887";
-const voted = localStorage.getItem("votedThisWeek");
+  <div class="vote-title">🌍 Vote to Unlock the Next City!</div>
+  <div id="city-buttons">
+    <button class="city-button">Amsterdam</button>
+    <button class="city-button">Lisbon</button>
+    <button class="city-button">Bangkok</button>
+    <button class="city-button">Rome</button>
+    <button class="city-button">Buenos Aires</button>
+  </div>
+  <div id="thank-you" class="thank-you" style="display:none;">✅ Thanks for voting!</div>
 
-document.querySelectorAll('.city-button').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const city = btn.textContent;
-    if (!isAdmin && voted) return;
-    castVote(city);
-  });
-});
+  <script>
+    const isAdmin = new URLSearchParams(window.location.search).get("admin") === "710887";
+    const thankYouMsg = document.getElementById("thank-you");
+    const cityContainer = document.getElementById("city-buttons");
 
-function castVote(city) {
-  fetch("https://api.github.com/repos/CITY-LINKED/city-linked-data/actions/workflows/register_vote.yml/dispatches", {
-    method: "POST",
-    headers: {
-      'Authorization': 'Bearer YOUR_GITHUB_TOKEN',
-      'Accept': 'application/vnd.github.v3+json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      ref: "main",
-      inputs: {
-        user: userId,
-        city: city
-      }
-    })
-  });
-  document.getElementById("thank-you").innerText = "✅ Thanks for voting!";
-  document.getElementById("city-buttons").innerHTML = "";
-  if (!isAdmin) localStorage.setItem("votedThisWeek", "true");
-}
-
-function getOrCreateUserId() {
-  const key = "CLVoteUserID";
-  let id = localStorage.getItem(key);
-  if (!id) {
-    id = "user_" + Math.random().toString(36).substring(2, 10);
-    localStorage.setItem(key, id);
-  }
-  return id;
-}
-</script>
-<script>
-const isAdmin = new URLSearchParams(window.location.search).get("admin") === "710887";
-const thankYouMsg = document.getElementById("thank-you");
-const cityContainer = document.getElementById("city-buttons");
-
-if (!isAdmin && localStorage.getItem("votedThisWeek")) {
-  cityContainer.innerHTML = "";
-  thankYouMsg.innerText = "✅ You've already voted this week. Come back next Monday!";
-  thankYouMsg.style.display = "block";
-}
-
-document.querySelectorAll(".city-button").forEach(button => {
-  button.onclick = () => {
-    const city = button.innerText;
-    const voteData = {
-      timestamp: new Date().toISOString(),
-      city: city,
-      user: "user_" + Math.random().toString(36).substring(2, 10)
-    };
-
-    fetch("https://api.github.com/repos/CITY-LINKED/city-linked-data/contents/vote_request.json", {
-      method: "PUT",
-      headers: {
-        "Authorization": "Bearer YOUR_GITHUB_TOKEN", // Replace if testing with secure method
-        "Accept": "application/vnd.github.v3+json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        message: "New vote request",
-        content: btoa(JSON.stringify(voteData)),
-        sha: "", // optional
-        branch: "main"
-      })
-    }).then(() => {
+    if (!isAdmin && localStorage.getItem("votedThisWeek")) {
       cityContainer.innerHTML = "";
-      thankYouMsg.innerText = "✅ Thanks for voting!";
+      thankYouMsg.innerText = "✅ You've already voted this week. Come back next Monday!";
       thankYouMsg.style.display = "block";
-      localStorage.setItem("votedThisWeek", "true");
-    }).catch(error => {
-      console.error("Error submitting vote:", error);
-      thankYouMsg.innerText = "❌ Failed to submit vote. Please try again later.";
-      thankYouMsg.style.display = "block";
-    });
-  };
-});
-</script>
+    }
 
+    document.querySelectorAll(".city-button").forEach(button => {
+      button.onclick = () => {
+        const city = button.innerText;
+        const user = "user_" + Math.random().toString(36).substring(2, 10);
+        const voteText = `VOTE_LOG - ${new Date().toISOString()} - ${user} voted for ${city}`;
+        console.log(voteText);
+
+        // simulate user vote feedback
+        cityContainer.innerHTML = "";
+        thankYouMsg.innerText = "✅ Thanks for voting!";
+        thankYouMsg.style.display = "block";
+        localStorage.setItem("votedThisWeek", "true");
+      };
+    });
+  </script>
 </body>
 </html>
