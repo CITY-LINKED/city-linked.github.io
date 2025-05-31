@@ -1,10 +1,11 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Vote to Unlock the Next City</title>
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Vote to Unlock the Next City</title>
+<style>
     @import url('https://fonts.googleapis.com/css2?family=Gruppo&display=swap');
     body {
       font-family: 'Gruppo', sans-serif;
@@ -80,12 +81,11 @@
   </style>
 </head>
 <body>
-  <div class="vote-title">🌍 Unlock The Next City</div>
-  <div class="vote-subtitle">Tap your favorite — and help unlock a new city this Friday.</div>
-  <div id="city-buttons" class="city-container"></div>
-  <div id="thank-you" class="thank-you"></div>
-
-  <script>
+<div class="vote-title">🌍 Unlock The Next City</div>
+<div class="vote-subtitle">Tap your favorite — and help unlock a new city this Friday.</div>
+<div class="city-container" id="city-buttons"></div>
+<div class="thank-you" id="thank-you"></div>
+<script>
     const urlParams = new URLSearchParams(window.location.search);
     const isAdmin = urlParams.get("admin") === "710887";
     const userId = getOrCreateUserId();
@@ -149,22 +149,29 @@
 
     function showAdminButtons() {
       const adminDiv = document.createElement("div");
-      adminDiv.className = "admin-buttons";
+      adminDiv.style.marginTop = "60px";
+      const table = document.createElement("table");
+      table.style.margin = "0 auto";
+      const row1 = document.createElement("tr");
+      const row2 = document.createElement("tr");
 
       const generateBtn = createAdminButton("🔄 Generate 5 Cities", "generate_cities");
       const announceBtn = createAdminButton("🏆 Announce Winner", "announce_winner");
       const resetBtn = createAdminButton("🧹 Reset All", "reset_votes");
 
+      const boostTd = document.createElement("td");
       boostButton = document.createElement("button");
       boostButton.className = "admin-button";
       boostButton.textContent = "➕ Boost Mode (100)";
       boostButton.onclick = () => toggleBoost(!boostMode);
-      adminDiv.appendChild(boostButton);
+      boostTd.appendChild(boostButton);
+      row1.appendChild(boostTd);
+      
 
-      adminDiv.appendChild(generateBtn);
-      adminDiv.appendChild(announceBtn);
-      adminDiv.appendChild(resetBtn);
-      document.body.appendChild(adminDiv);
+      const td1 = document.createElement("td"); td1.appendChild(generateBtn); row1.appendChild(td1);
+      const td2 = document.createElement("td"); td2.appendChild(announceBtn); row2.appendChild(td2);
+      const td3 = document.createElement("td"); td3.appendChild(resetBtn); row2.appendChild(td3);
+      table.appendChild(row1); table.appendChild(row2); adminDiv.appendChild(table); document.body.appendChild(adminDiv);
     }
 
     function toggleBoost(state) {
