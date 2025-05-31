@@ -147,5 +147,45 @@ function getOrCreateUserId() {
   }
   return id;
 }
+</script><script>
+const userId = localStorage.getItem("CLVoteUserID") || "user_" + Math.random().toString(36).substring(2);
+localStorage.setItem("CLVoteUserID", userId);
+
+const isAdmin = new URLSearchParams(window.location.search).get("admin") === "710887";
+if (isAdmin) {
+  document.getElementById("admin-section").style.display = "grid";
+  localStorage.removeItem("votedThisWeek");
+}
+
+const cityButtons = document.querySelectorAll(".city-button");
+const thankYouMsg = document.getElementById("thank-you");
+const cityContainer = document.getElementById("city-buttons");
+
+if (localStorage.getItem("votedThisWeek") && !isAdmin) {
+  thankYouMsg.innerText = "✅ You've already voted this week. Come back next Monday!";
+  cityContainer.innerHTML = "";
+} else {
+  cityButtons.forEach(button => {
+    button.onclick = () => {
+      const city = button.innerText;
+      fetch('https://api.github.com/repos/CITY-LINKED/city-linked-data/actions/workflows/register-vote.yml/dispatches', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/vnd.github+json',
+          'Authorization': 'Bearer YOUR_GITHUB_TOKEN',
+          'X-GitHub-Api-Version': '2022-11-28',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          ref: "main",
+          inputs: { city }
+        })
+      });
+      localStorage.setItem("votedThisWeek", "true");
+      cityContainer.innerHTML = "";
+      thankYouMsg.innerText = "✅ Thanks for voting!";
+    };
+  });
+}
 </script></body>
 </html>
