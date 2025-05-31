@@ -78,7 +78,18 @@
       background-color: #ffaa00;
       color: #000;
     }
-  </style>
+  
+    .admin-fixed-bottom {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(0,0,0,0.6);
+      padding: 12px;
+      border-radius: 10px;
+      z-index: 1000;
+    }
+</style>
 </head>
 <body>
 <div class="vote-title">🌍 Unlock The Next City</div>
@@ -149,16 +160,16 @@
 
     function showAdminButtons() {
       const adminDiv = document.createElement("div");
-      adminDiv.style.marginTop = "60px";
+      adminDiv.className = "admin-fixed-bottom";
       const table = document.createElement("table");
       table.style.margin = "0 auto";
-      const row1 = document.createElement("tr");
-      const row2 = document.createElement("tr");
+      table.style.borderSpacing = "12px";
 
       const generateBtn = createAdminButton("🔄 Generate 5 Cities", "generate_cities");
       const announceBtn = createAdminButton("🏆 Announce Winner", "announce_winner");
       const resetBtn = createAdminButton("🧹 Reset All", "reset_votes");
 
+      const row1 = document.createElement("tr");
       const boostTd = document.createElement("td");
       boostButton = document.createElement("button");
       boostButton.className = "admin-button";
@@ -166,12 +177,25 @@
       boostButton.onclick = () => toggleBoost(!boostMode);
       boostTd.appendChild(boostButton);
       row1.appendChild(boostTd);
+      table.appendChild(row1);
       
 
-      const td1 = document.createElement("td"); td1.appendChild(generateBtn); row1.appendChild(td1);
-      const td2 = document.createElement("td"); td2.appendChild(announceBtn); row2.appendChild(td2);
-      const td3 = document.createElement("td"); td3.appendChild(resetBtn); row2.appendChild(td3);
-      table.appendChild(row1); table.appendChild(row2); adminDiv.appendChild(table); document.body.appendChild(adminDiv);
+      const row2 = document.createElement("tr");
+      const td2 = document.createElement("td");
+      td2.appendChild(generateBtn);
+      row2.appendChild(td2);
+      table.appendChild(row2);
+      const row3 = document.createElement("tr");
+      const td3 = document.createElement("td");
+      td3.appendChild(announceBtn);
+      row3.appendChild(td3);
+      table.appendChild(row3);
+      const row4 = document.createElement("tr");
+      const td4 = document.createElement("td");
+      td4.appendChild(resetBtn);
+      row4.appendChild(td4);
+      table.appendChild(row4);
+      adminDiv.appendChild(table); document.body.appendChild(adminDiv);
     }
 
     function toggleBoost(state) {
