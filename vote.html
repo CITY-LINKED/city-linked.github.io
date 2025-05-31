@@ -1,10 +1,11 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Vote to Unlock the Next City</title>
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Vote to Unlock the Next City</title>
+<style>
     @import url('https://fonts.googleapis.com/css2?family=Gruppo&display=swap');
     body {
       font-family: 'Gruppo', sans-serif;
@@ -80,28 +81,71 @@
   </style>
 </head>
 <body>
-  <div class="vote-title">🌍 Unlock The Next City</div>
-  <div class="vote-subtitle">Tap your favorite — and help unlock a new city this Friday.</div>
-  <div id="city-buttons" class="city-container">
-    <button class="city-button">Lisbon</button>
-    <button class="city-button">Tokyo</button>
-    <button class="city-button">New York</button>
-    <button class="city-button">Cairo</button>
-    <button class="city-button">Bangkok</button>
-  </div>
-  <div id="thank-you" class="thank-you"></div>
-  <div id="admin-section" class="admin-buttons" style="display: none;">    
-    <button class="admin-button">➕ Boost Mode (100)</button>
-    <button class="admin-button">🏆 Announce Winner</button>
-    <button class="admin-button">🔄 Generate 5 Cities</button>
-    <button class="admin-button">🧹 Reset All</button>
-  </div>
-  <script>
+<div class="vote-title">🌍 Unlock The Next City</div>
+<div class="vote-subtitle">Tap your favorite — and help unlock a new city this Friday.</div>
+<div class="city-container" id="city-buttons">
+<button class="city-button">Lisbon</button>
+<button class="city-button">Tokyo</button>
+<button class="city-button">New York</button>
+<button class="city-button">Cairo</button>
+<button class="city-button">Bangkok</button>
+</div>
+<div class="thank-you" id="thank-you"></div>
+<div class="admin-buttons" id="admin-section" style="display: none;">
+<button class="admin-button">➕ Boost Mode (100)</button>
+<button class="admin-button">🏆 Announce Winner</button>
+<button class="admin-button">🔄 Generate 5 Cities</button>
+<button class="admin-button">🧹 Reset All</button>
+</div>
+<script>
     const urlParams = new URLSearchParams(window.location.search);
     const isAdmin = urlParams.get("admin") === "710887";
     if (isAdmin) {
       document.getElementById("admin-section").style.display = "grid";
     }
   </script>
-</body>
+<script>
+const userId = getOrCreateUserId();
+const isAdmin = new URLSearchParams(window.location.search).get("admin") === "710887";
+const voted = localStorage.getItem("votedThisWeek");
+
+document.querySelectorAll('.city-button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const city = btn.textContent;
+    if (!isAdmin && voted) return;
+    castVote(city);
+  });
+});
+
+function castVote(city) {
+  fetch("https://api.github.com/repos/CITY-LINKED/city-linked-data/actions/workflows/register_vote.yml/dispatches", {
+    method: "POST",
+    headers: {
+      'Authorization': 'Bearer YOUR_GITHUB_TOKEN',
+      'Accept': 'application/vnd.github.v3+json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      ref: "main",
+      inputs: {
+        user: userId,
+        city: city
+      }
+    })
+  });
+  document.getElementById("thank-you").innerText = "✅ Thanks for voting!";
+  document.getElementById("city-buttons").innerHTML = "";
+  if (!isAdmin) localStorage.setItem("votedThisWeek", "true");
+}
+
+function getOrCreateUserId() {
+  const key = "CLVoteUserID";
+  let id = localStorage.getItem(key);
+  if (!id) {
+    id = "user_" + Math.random().toString(36).substring(2, 10);
+    localStorage.setItem(key, id);
+  }
+  return id;
+}
+</script></body>
 </html>
