@@ -1,106 +1,101 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Vote to Unlock the Next City</title>
+  <title>City Linked Voting</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Gruppo&display=swap');
     body {
-      font-family: 'Gruppo', sans-serif;
-      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/bg.jpg') no-repeat center center fixed;
-      background-size: cover;
-      color: #ffffff;
+      font-family: 'Arial', sans-serif;
+      background: #121212;
+      color: white;
       text-align: center;
-      padding: 40px 20px;
-    }
-    .vote-title {
-      font-size: 32px;
-      margin-bottom: 10px;
-    }
-    .vote-subtitle {
-      font-size: 18px;
-      color: #dddddd;
-      margin-bottom: 30px;
+      padding: 40px;
     }
     .city-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 20px;
+      gap: 16px;
       margin-bottom: 30px;
     }
     .city-button {
-      background: white;
-      border: 2px solid #00B4DB;
-      border-radius: 14px;
-      padding: 18px 24px;
+      background-color: #00B4DB;
+      border: none;
+      border-radius: 8px;
+      padding: 16px 24px;
       font-size: 18px;
-      font-weight: bold;
-      color: #000000;
+      color: white;
       cursor: pointer;
-      transition: transform 0.15s, background-color 0.3s;
-      min-width: 160px;
+      transition: background 0.3s;
     }
     .city-button:hover {
-      background-color: #e6faff;
-      transform: scale(1.04);
+      background-color: #0098ba;
     }
     .thank-you {
       font-size: 20px;
-      color: #ffffff;
       margin-top: 20px;
-    }
-    .admin-buttons {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 12px;
-      max-width: 700px;
-      margin: 140px auto 0;
-    }
-    .admin-button {
-      background-color: #00B4DB;
-      border: none;
-      border-radius: 12px;
-      padding: 14px;
-      font-size: 14px;
-      font-weight: bold;
-      color: #fff;
-      cursor: pointer;
-      transition: background-color 0.3s, transform 0.2s;
-    }
-    .admin-button:hover {
-      background-color: #0093af;
-      transform: scale(1.04);
-    }
-    .admin-button.active {
-      background-color: #ffaa00;
-      color: #000;
     }
   </style>
 </head>
 <body>
-  <div class="vote-title">🌍 Unlock The Next City</div>
-  <div class="vote-subtitle">Tap your favorite — and help unlock a new city this Friday.</div>
+  <h1>🌍 Unlock The Next City</h1>
+  <p>Tap your favorite — and help unlock a new city this Friday.</p>
+
   <div id="city-buttons" class="city-container">
+    <button class="city-button">Amsterdam</button>
     <button class="city-button">Lisbon</button>
-    <button class="city-button">Tokyo</button>
-    <button class="city-button">New York</button>
-    <button class="city-button">Cairo</button>
     <button class="city-button">Bangkok</button>
+    <button class="city-button">Rome</button>
+    <button class="city-button">Buenos Aires</button>
   </div>
+
   <div id="thank-you" class="thank-you"></div>
-  <div id="admin-section" class="admin-buttons" style="display: none;">    
-    <button class="admin-button">➕ Boost Mode (100)</button>
-    <button class="admin-button">🏆 Announce Winner</button>
-    <button class="admin-button">🔄 Generate 5 Cities</button>
-    <button class="admin-button">🧹 Reset All</button>
-  </div>
+
   <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const isAdmin = urlParams.get("admin") === "710887";
-    if (isAdmin) {
-      document.getElementById("admin-section").style.display = "grid";
+    const userId = getOrCreateUserId();
+    const isAdmin = new URLSearchParams(window.location.search).get("admin") === "710887";
+    const voted = localStorage.getItem("votedThisWeek");
+
+    const buttons = document.querySelectorAll('.city-button');
+    buttons.forEach(btn => {
+      btn.onclick = () => {
+        const city = btn.textContent;
+        if (!isAdmin && voted) return;
+        castVote(city);
+      };
+    });
+
+    function castVote(city) {
+      fetch("https://api.github.com/repos/CITY-LINKED/city-linked-data/actions/workflows/register_vote.yml/dispatches", {
+        method: "POST",
+        headers: {
+          'Authorization': 'Bearer YOUR_GITHUB_TOKEN',
+          'Accept': 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          ref: "main",
+          inputs: {
+            user: userId,
+            city: city
+          }
+        })
+      });
+      document.getElementById("thank-you").innerText = "✅ Thanks for voting!";
+      document.getElementById("city-buttons").innerHTML = "";
+      if (!isAdmin) localStorage.setItem("votedThisWeek", "true");
+    }
+
+    function getOrCreateUserId() {
+      const key = "CLVoteUserID";
+      let id = localStorage.getItem(key);
+      if (!id) {
+        id = "user_" + Math.random().toString(36).substring(2, 10);
+        localStorage.setItem(key, id);
+      }
+      return id;
     }
   </script>
 </body>
