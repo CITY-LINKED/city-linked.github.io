@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Vote to Unlock the Next City</title>
+  <title>Admin Vote Panel</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -34,7 +34,7 @@
   </style>
 </head>
 <body>
-  <div class="vote-title">🌍 Vote to Unlock the Next City!</div>
+  <div class="vote-title">🛠️ Admin: Test City Voting</div>
   <div id="city-buttons">
     <button class="city-button">Amsterdam</button>
     <button class="city-button">Lisbon</button>
@@ -42,31 +42,44 @@
     <button class="city-button">Rome</button>
     <button class="city-button">Buenos Aires</button>
   </div>
-  <div id="thank-you" class="thank-you" style="display:none;">✅ Thanks for voting!</div>
+  <div id="thank-you" class="thank-you" style="display:none;">✅ Admin vote registered!</div>
 
   <script>
-    const isAdmin = new URLSearchParams(window.location.search).get("admin") === "710887";
-    const thankYouMsg = document.getElementById("thank-you");
     const cityContainer = document.getElementById("city-buttons");
-
-    if (!isAdmin && localStorage.getItem("votedThisWeek")) {
-      cityContainer.innerHTML = "";
-      thankYouMsg.innerText = "✅ You've already voted this week. Come back next Monday!";
-      thankYouMsg.style.display = "block";
-    }
+    const thankYouMsg = document.getElementById("thank-you");
 
     document.querySelectorAll(".city-button").forEach(button => {
       button.onclick = () => {
         const city = button.innerText;
-        const user = "user_" + Math.random().toString(36).substring(2, 10);
-        const voteText = `VOTE_LOG - ${new Date().toISOString()} - ${user} voted for ${city}`;
-        console.log(voteText);
+        const user = "admin_710887";
+        const votePayload = {
+          timestamp: new Date().toISOString(),
+          city: city,
+          user: user
+        };
 
-        // simulate user vote feedback
-        cityContainer.innerHTML = "";
-        thankYouMsg.innerText = "✅ Thanks for voting!";
-        thankYouMsg.style.display = "block";
-        localStorage.setItem("votedThisWeek", "true");
+        fetch("https://api.github.com/repos/CITY-LINKED/city-linked-data/contents/vote_request.json", {
+          method: "PUT",
+          headers: {
+            "Authorization": "Bearer REPLACE_WITH_YOUR_PAT",
+            "Accept": "application/vnd.github.v3+json"
+          },
+          body: JSON.stringify({
+            message: "Admin simulated vote",
+            content: btoa(JSON.stringify(votePayload)),
+            branch: "main"
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          cityContainer.innerHTML = "";
+          thankYouMsg.style.display = "block";
+        })
+        .catch(err => {
+          thankYouMsg.innerText = "❌ Failed to submit vote.";
+          thankYouMsg.style.color = "red";
+          thankYouMsg.style.display = "block";
+        });
       };
     });
   </script>
