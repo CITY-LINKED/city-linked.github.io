@@ -15,13 +15,9 @@
       padding: 40px 20px;
     }
     .vote-title {
-      font-size: 32px;
-      margin-bottom: 10px;
-    }
-    .vote-subtitle {
-      font-size: 18px;
-      color: #dddddd;
+      font-size: 20px;
       margin-bottom: 30px;
+      color: #ffffff;
     }
     .city-container {
       display: flex;
@@ -31,21 +27,20 @@
       margin-bottom: 30px;
     }
     .city-button {
-      background: linear-gradient(135deg, #00B4DB, #0083B0);
-      border: none;
-      border-radius: 16px;
-      box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-      padding: 22px 28px;
-      font-size: 20px;
-      color: #fff;
-      cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
-      min-width: 180px;
+      background: white;
+      border: 2px solid #00B4DB;
+      border-radius: 14px;
+      padding: 18px 24px;
+      font-size: 18px;
       font-weight: bold;
+      color: #000000;
+      cursor: pointer;
+      transition: transform 0.15s, background-color 0.3s;
+      min-width: 160px;
     }
     .city-button:hover {
-      transform: scale(1.07);
-      box-shadow: 0 8px 16px rgba(255,255,255,0.2);
+      background-color: #e6faff;
+      transform: scale(1.04);
     }
     .thank-you {
       font-size: 20px;
@@ -81,8 +76,7 @@
   </style>
 </head>
 <body>
-  <div class="vote-title">🌍 Where Should We Go Next?</div>
-  <div class="vote-subtitle">Tap your favorite — and help unlock a new city this Friday.</div>
+  <div class="vote-title">🌍 Where Should We Go Next? Tap your favorite and help unlock a new city this Friday.</div>
   <div id="city-buttons" class="city-container"></div>
   <div id="thank-you" class="thank-you"></div>
 
