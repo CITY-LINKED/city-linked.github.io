@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Vote to Unlock the Next City</title>
-<style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vote to Unlock the Next City</title>
+  <style>
     @import url('https://fonts.googleapis.com/css2?family=Gruppo&display=swap');
     body {
       font-family: 'Gruppo', sans-serif;
@@ -78,25 +77,15 @@
       background-color: #ffaa00;
       color: #000;
     }
-  
-    .admin-fixed-bottom {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: rgba(0,0,0,0.6);
-      padding: 12px;
-      border-radius: 10px;
-      z-index: 1000;
-    }
-</style>
+  </style>
 </head>
 <body>
-<div class="vote-title">🌍 Unlock The Next City</div>
-<div class="vote-subtitle">Tap your favorite — and help unlock a new city this Friday.</div>
-<div class="city-container" id="city-buttons"></div>
-<div class="thank-you" id="thank-you"></div>
-<script>
+  <div class="vote-title">🌍 Unlock The Next City</div>
+  <div class="vote-subtitle">Tap your favorite — and help unlock a new city this Friday.</div>
+  <div id="city-buttons" class="city-container"></div>
+  <div id="thank-you" class="thank-you"></div>
+
+  <script>
     const urlParams = new URLSearchParams(window.location.search);
     const isAdmin = urlParams.get("admin") === "710887";
     const userId = getOrCreateUserId();
@@ -160,42 +149,22 @@
 
     function showAdminButtons() {
       const adminDiv = document.createElement("div");
-      adminDiv.className = "admin-fixed-bottom";
-      const table = document.createElement("table");
-      table.style.margin = "0 auto";
-      table.style.borderSpacing = "12px";
+      adminDiv.className = "admin-buttons";
 
       const generateBtn = createAdminButton("🔄 Generate 5 Cities", "generate_cities");
       const announceBtn = createAdminButton("🏆 Announce Winner", "announce_winner");
       const resetBtn = createAdminButton("🧹 Reset All", "reset_votes");
 
-      const row1 = document.createElement("tr");
-      const boostTd = document.createElement("td");
       boostButton = document.createElement("button");
       boostButton.className = "admin-button";
       boostButton.textContent = "➕ Boost Mode (100)";
       boostButton.onclick = () => toggleBoost(!boostMode);
-      boostTd.appendChild(boostButton);
-      row1.appendChild(boostTd);
-      table.appendChild(row1);
-      
+      adminDiv.appendChild(boostButton);
 
-      const row2 = document.createElement("tr");
-      const td2 = document.createElement("td");
-      td2.appendChild(generateBtn);
-      row2.appendChild(td2);
-      table.appendChild(row2);
-      const row3 = document.createElement("tr");
-      const td3 = document.createElement("td");
-      td3.appendChild(announceBtn);
-      row3.appendChild(td3);
-      table.appendChild(row3);
-      const row4 = document.createElement("tr");
-      const td4 = document.createElement("td");
-      td4.appendChild(resetBtn);
-      row4.appendChild(td4);
-      table.appendChild(row4);
-      adminDiv.appendChild(table); document.body.appendChild(adminDiv);
+      adminDiv.appendChild(generateBtn);
+      adminDiv.appendChild(announceBtn);
+      adminDiv.appendChild(resetBtn);
+      document.body.appendChild(adminDiv);
     }
 
     function toggleBoost(state) {
