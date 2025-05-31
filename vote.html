@@ -12,53 +12,71 @@
       background-size: cover;
       color: #ffffff;
       text-align: center;
-      padding: 40px;
+      padding: 40px 20px;
     }
     .vote-title {
-      font-size: 28px;
-      margin-bottom: 20px;
-      color: #ffffff;
+      font-size: 32px;
+      margin-bottom: 10px;
     }
     .vote-subtitle {
       font-size: 16px;
       color: #cccccc;
       margin-bottom: 30px;
     }
-    .city-container, .admin-buttons {
+    .city-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 20px;
+      gap: 16px;
       margin-bottom: 30px;
     }
-    .city-button, .admin-button {
-      background-color: rgba(255, 255, 255, 0.92);
+    .city-button {
+      background: rgba(255, 255, 255, 0.9);
       border: 2px solid #00B4DB;
-      border-radius: 12px;
-      padding: 20px 30px;
+      border-radius: 16px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      padding: 18px 24px;
       font-size: 18px;
       color: #1a1a1a;
       cursor: pointer;
-      transition: 0.3s ease;
-      min-width: 140px;
+      transition: transform 0.2s, background-color 0.3s;
+      min-width: 160px;
     }
     .city-button:hover {
-      background-color: #ffffff;
-      color: white;
-    }
-    .admin-button {
       background-color: #00B4DB;
-      border: none;
-      font-size: 14px;
-      padding: 12px;
-      color: #fff;
-    }
-    .admin-button:hover {
-      background-color: #0093af;
+      color: white;
+      transform: scale(1.05);
     }
     .thank-you {
       font-size: 20px;
       color: #ffffff;
+      margin-top: 20px;
+    }
+    .admin-buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      max-width: 700px;
+      margin: 30px auto;
+    }
+    .admin-button {
+      background-color: #00B4DB;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+    .admin-button:hover {
+      background-color: #0093af;
+      transform: scale(1.04);
+    }
+    .admin-button.active {
+      background-color: #ffaa00;
+      color: #000;
     }
   </style>
 </head>
@@ -76,6 +94,9 @@
     const backendURL = "https://api.github.com/repos/CITY-LINKED/city-linked-data/dispatches";
     const jsonURL = "https://CITY-LINKED.github.io/city-linked-data/weekly_cities.json";
 
+    let boostMode = false;
+    let boostButton;
+
     const hasVoted = localStorage.getItem("votedThisWeek");
 
     if (hasVoted && !isAdmin) {
@@ -89,11 +110,18 @@
             const btn = document.createElement("button");
             btn.className = "city-button";
             btn.textContent = city;
-            btn.onclick = () => castVote(city);
+            btn.onclick = () => {
+              if (boostMode) {
+                sendAdminAction("boost_vote", city);
+                toggleBoost(false);
+              } else {
+                castVote(city);
+              }
+            };
             container.appendChild(btn);
           });
 
-          if (isAdmin) showAdminButtons(data.cities);
+          if (isAdmin) showAdminButtons();
         });
     }
 
@@ -121,41 +149,53 @@
       return id;
     }
 
-    function showAdminButtons(cities) {
+    function showAdminButtons() {
       const adminDiv = document.getElementById("admin-buttons");
 
-      const createBtn = createAdminButton("🔄 Generate 5 Cities", "generate_cities");
+      const generateBtn = createAdminButton("🔄 Generate 5 Cities", "generate_cities");
       const announceBtn = createAdminButton("🏆 Announce Winner", "announce_winner");
       const resetBtn = createAdminButton("🧹 Reset All", "reset_votes");
 
-      adminDiv.appendChild(createBtn);
-      cities.forEach(city => {
-        const boostBtn = createAdminButton(`➕ +100 to ${city}`, "boost_vote", city);
-        adminDiv.appendChild(boostBtn);
-      });
+      boostButton = document.createElement("button");
+      boostButton.className = "admin-button";
+      boostButton.textContent = "➕ Boost Mode (100)";
+      boostButton.onclick = () => toggleBoost(!boostMode);
+      adminDiv.appendChild(boostButton);
+
+      adminDiv.appendChild(generateBtn);
       adminDiv.appendChild(announceBtn);
       adminDiv.appendChild(resetBtn);
     }
 
-    function createAdminButton(label, action, city = "") {
+    function toggleBoost(state) {
+      boostMode = state;
+      if (boostButton) {
+        boostButton.classList.toggle("active", boostMode);
+        boostButton.textContent = boostMode ? "✅ Boost Mode Active" : "➕ Boost Mode (100)";
+      }
+    }
+
+    function createAdminButton(label, action) {
       const btn = document.createElement("button");
       btn.className = "admin-button";
       btn.textContent = label;
-      btn.onclick = () => {
-        fetch(backendURL, {
-          method: "POST",
-          headers: {
-            "Accept": "application/vnd.github+json",
-            "Authorization": "Bearer YOUR_GITHUB_TOKEN",
-            "X-GitHub-Api-Version": "2022-11-28"
-          },
-          body: JSON.stringify({
-            event_type: action,
-            client_payload: { city }
-          })
-        }).then(() => location.reload());
-      };
+      btn.onclick = () => sendAdminAction(action);
       return btn;
+    }
+
+    function sendAdminAction(action, city = "") {
+      fetch(backendURL, {
+        method: "POST",
+        headers: {
+          "Accept": "application/vnd.github+json",
+          "Authorization": "Bearer YOUR_GITHUB_TOKEN",
+          "X-GitHub-Api-Version": "2022-11-28"
+        },
+        body: JSON.stringify({
+          event_type: action,
+          client_payload: { city }
+        })
+      }).then(() => location.reload());
     }
   </script>
 </body>
