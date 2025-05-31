@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vote to Unlock the Next City</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Gruppo&display=swap');
+    body {
+      font-family: 'Gruppo', sans-serif;
+      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #ffffff;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .vote-title {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+    .vote-subtitle {
+      font-size: 18px;
+      color: #dddddd;
+      margin-bottom: 30px;
+    }
+    .city-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    .city-button {
+      background: white;
+      border: 2px solid #00B4DB;
+      border-radius: 14px;
+      padding: 18px 24px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #000000;
+      cursor: pointer;
+      transition: transform 0.15s, background-color 0.3s;
+      min-width: 160px;
+    }
+    .city-button:hover {
+      background-color: #e6faff;
+      transform: scale(1.04);
+    }
+    .thank-you {
+      font-size: 20px;
+      color: #ffffff;
+      margin-top: 20px;
+    }
+    .admin-buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      max-width: 700px;
+      margin: 140px auto 0;
+    }
+    .admin-button {
+      background-color: #00B4DB;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+    .admin-button:hover {
+      background-color: #0093af;
+      transform: scale(1.04);
+    }
+    .admin-button.active {
+      background-color: #ffaa00;
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+  <div class="vote-title">🌍 Unlock The Next City</div>
+  <div class="vote-subtitle">Tap your favorite — and help unlock a new city this Friday.</div>
+  <div id="city-buttons" class="city-container"></div>
+  <div id="thank-you" class="thank-you"></div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const isAdmin = urlParams.get("admin") === "710887";
+    const userId = getOrCreateUserId();
+    const backendURL = "https://api.github.com/repos/CITY-LINKED/city-linked-data/dispatches";
+    const jsonURL = "https://CITY-LINKED.github.io/city-linked-data/weekly_cities.json";
+
+    let boostMode = false;
+    let boostButton;
+
+    const hasVoted = localStorage.getItem("votedThisWeek");
+
+    if (hasVoted && !isAdmin) {
+      document.getElementById("thank-you").innerText = "✅ You've already voted this week. Come back Monday!";
+    } else {
+      fetch(jsonURL)
+        .then(res => res.json())
+        .then(data => {
+          const container = document.getElementById("city-buttons");
+          data.cities.forEach(city => {
+            const btn = document.createElement("button");
+            btn.className = "city-button";
+            btn.textContent = city;
+            btn.onclick = () => {
+              if (boostMode) {
+                sendAdminAction("boost_vote", city);
+                toggleBoost(false);
+              } else {
+                castVote(city);
+              }
+            };
+            container.appendChild(btn);
+          });
+
+          if (isAdmin) showAdminButtons();
+        });
+    }
+
+    function castVote(city) {
+      fetch("https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, city })
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("city-buttons").innerHTML = "";
+        document.getElementById("thank-you").innerText = "✅ " + data.message;
+        if (!isAdmin) localStorage.setItem("votedThisWeek", "true");
+      });
+    }
+
+    function getOrCreateUserId() {
+      const key = "CLVoteUserID";
+      let id = localStorage.getItem(key);
+      if (!id) {
+        id = "user_" + Math.random().toString(36).substring(2, 10);
+        localStorage.setItem(key, id);
+      }
+      return id;
+    }
+
+    function showAdminButtons() {
+      const adminDiv = document.createElement("div");
+      adminDiv.className = "admin-buttons";
+
+      const generateBtn = createAdminButton("🔄 Generate 5 Cities", "generate_cities");
+      const announceBtn = createAdminButton("🏆 Announce Winner", "announce_winner");
+      const resetBtn = createAdminButton("🧹 Reset All", "reset_votes");
+
+      boostButton = document.createElement("button");
+      boostButton.className = "admin-button";
+      boostButton.textContent = "➕ Boost Mode (100)";
+      boostButton.onclick = () => toggleBoost(!boostMode);
+      adminDiv.appendChild(boostButton);
+
+      adminDiv.appendChild(generateBtn);
+      adminDiv.appendChild(announceBtn);
+      adminDiv.appendChild(resetBtn);
+      document.body.appendChild(adminDiv);
+    }
+
+    function toggleBoost(state) {
+      boostMode = state;
+      if (boostButton) {
+        boostButton.classList.toggle("active", boostMode);
+        boostButton.textContent = boostMode ? "✅ Boost Mode Active" : "➕ Boost Mode (100)";
+      }
+    }
+
+    function createAdminButton(label, action) {
+      const btn = document.createElement("button");
+      btn.className = "admin-button";
+      btn.textContent = label;
+      btn.onclick = () => sendAdminAction(action);
+      return btn;
+    }
+
+    function sendAdminAction(action, city = "") {
+      fetch(backendURL, {
+        method: "POST",
+        headers: {
+          "Accept": "application/vnd.github+json",
+          "Authorization": "Bearer YOUR_GITHUB_TOKEN",
+          "X-GitHub-Api-Version": "2022-11-28"
+        },
+        body: JSON.stringify({
+          event_type: action,
+          client_payload: { city }
+        })
+      }).then(() => location.reload());
+    }
+  </script>
+</body>
+</html>
