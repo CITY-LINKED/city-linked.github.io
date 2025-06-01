@@ -14,21 +14,11 @@
       text-align: center;
       padding: 40px 20px;
     }
-    .vote-title {
-      font-size: 32px;
-      margin-bottom: 10px;
-    }
-    .vote-subtitle {
-      font-size: 18px;
-      color: #dddddd;
-      margin-bottom: 30px;
-    }
     .city-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 20px;
-      margin-bottom: 30px;
     }
     .city-button {
       background: white;
@@ -39,87 +29,65 @@
       font-weight: bold;
       color: #000000;
       cursor: pointer;
-      transition: transform 0.15s, background-color 0.3s;
-      min-width: 160px;
-    }
-    .city-button:hover {
-      background-color: #e6faff;
-      transform: scale(1.04);
     }
     .thank-you {
       font-size: 20px;
-      color: #ffffff;
       margin-top: 20px;
     }
   </style>
 </head>
 <body>
-  <div class="vote-title">🌍 UNLOCK THE NEXT CITY</div>
-  <div class="vote-subtitle">Tap your favorite — and help unlock a new city this Friday.</div>
+  <h1>🌍 UNLOCK THE NEXT CITY</h1>
+  <p>Tap your favorite — and help unlock a new city this Friday.</p>
   <div id="city-buttons" class="city-container"></div>
   <div id="thank-you" class="thank-you"></div>
 
   <script>
     const weeklyCitiesURL = "https://CITY-LINKED.github.io/city-linked-data/weekly_cities.json";
-    const userId = getOrCreateUserId();
-    const isAdmin = window.location.search.includes("710887");
+    const voteRequestURL = "https://api.github.com/repos/CITY-LINKED/city-linked-data/contents/vote_request.json";
+    const userId = localStorage.getItem("CLVoteUserID") || (() => {
+      const id = "user_" + Math.random().toString(36).substr(2, 8);
+      localStorage.setItem("CLVoteUserID", id);
+      return id;
+    })();
 
-    if (localStorage.getItem("votedThisWeek") && !isAdmin) {
-      document.getElementById("thank-you").innerText = "✅ You’ve already voted. Come back next Monday!";
-    } else {
-      fetch(weeklyCitiesURL)
-        .then(res => res.json())
-        .then(data => {
-          const container = document.getElementById("city-buttons");
-          data.cities.forEach(city => {
-            const btn = document.createElement("button");
-            btn.className = "city-button";
-            btn.textContent = city;
-            btn.onclick = () => vote(city);
-            container.appendChild(btn);
-          });
+    fetch(weeklyCitiesURL)
+      .then(res => res.json())
+      .then(data => {
+        const container = document.getElementById("city-buttons");
+        data.cities.forEach(city => {
+          const btn = document.createElement("button");
+          btn.className = "city-button";
+          btn.textContent = city;
+          btn.onclick = () => vote(city);
+          container.appendChild(btn);
         });
-    }
+      });
 
     function vote(city) {
       const payload = {
         timestamp: new Date().toISOString(),
-        user: isAdmin ? "admin_710887" : userId,
+        user: userId,
         city: city
       };
+      const message = "New vote submitted";
+      const content = btoa(JSON.stringify(payload, null, 2));
 
-      fetch("https://api.github.com/repos/CITY-LINKED/city-linked-data/contents/vote_request_user.json", {
+      fetch(voteRequestURL, {
         method: "PUT",
         headers: {
-          "Authorization": "Bearer YOUR_TOKEN_HERE", // <- Replace in backend only
+          "Authorization": "Bearer YOUR_TOKEN_HERE",
           "Accept": "application/vnd.github+json",
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-          message: "New vote submitted",
-          content: btoa(JSON.stringify(payload, null, 2)),
-          sha: null
-        })
-      })
-      .then(res => res.json())
-      .then(() => {
+        body: JSON.stringify({ message, content, sha: null })
+      }).then(() => {
         document.getElementById("city-buttons").innerHTML = "";
         document.getElementById("thank-you").innerText = `✅ Thanks for voting for ${city}!`;
         localStorage.setItem("votedThisWeek", "true");
-      })
-      .catch(() => {
-        document.getElementById("thank-you").innerText = "Something went wrong. Try again later.";
+      }).catch(() => {
+        document.getElementById("thank-you").innerText = "❌ Vote failed. Try again.";
       });
-    }
-
-    function getOrCreateUserId() {
-      const key = "CLVoteUserID";
-      let id = localStorage.getItem(key);
-      if (!id) {
-        id = "user_" + Math.random().toString(36).substring(2, 10);
-        localStorage.setItem(key, id);
-      }
-      return id;
     }
   </script>
 </body>
