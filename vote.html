@@ -125,7 +125,7 @@
         body: JSON.stringify({
           message: "New vote submitted",
           content: btoa(JSON.stringify(payload, null, 2)),
-          sha: "LATEST_FILE_SHA"  // <-- replace with current SHA of vote_request.json
+          sha: "a230ce70fd6a48929ae93a922795eb7b4624aa48"  // <-- replace with current SHA of vote_request.json
         })
       }).then(response => {
         document.getElementById("city-buttons").innerHTML = "";
