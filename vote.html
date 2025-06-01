@@ -51,32 +51,6 @@
       color: #ffffff;
       margin-top: 20px;
     }
-    .admin-buttons {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 12px;
-      max-width: 700px;
-      margin: 140px auto 0;
-    }
-    .admin-button {
-      background-color: #00B4DB;
-      border: none;
-      border-radius: 12px;
-      padding: 14px;
-      font-size: 14px;
-      font-weight: bold;
-      color: #fff;
-      cursor: pointer;
-      transition: background-color 0.3s, transform 0.2s;
-    }
-    .admin-button:hover {
-      background-color: #0093af;
-      transform: scale(1.04);
-    }
-    .admin-button.active {
-      background-color: #ffaa00;
-      color: #000;
-    }
   </style>
 </head>
 <body>
@@ -114,38 +88,27 @@
         city: city
       };
 
-      fetch("https://api.github.com/repos/CITY-LINKED/city-linked-data/contents/request.json", {
-        method: "GET",
+      fetch("https://api.github.com/repos/CITY-LINKED/city-linked-data/contents/vote_request_user.json", {
+        method: "PUT",
         headers: {
-          "Authorization": "Bearer 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",
-          "Accept": "application/vnd.github+json"
-        }
+          "Authorization": "Bearer YOUR_TOKEN_HERE", // <- Replace in backend only
+          "Accept": "application/vnd.github+json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          message: "New vote submitted",
+          content: btoa(JSON.stringify(payload, null, 2)),
+          sha: null
+        })
       })
       .then(res => res.json())
-      .then(json => {
-        const sha = json.sha || null;
-        return fetch("https://api.github.com/repos/CITY-LINKED/city-linked-data/contents/request.json", {
-          method: "PUT",
-          headers: {
-            "Authorization": "Bearer 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",
-            "Accept": "application/vnd.github+json",
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            message: `New vote: ${city}`,
-            content: btoa(JSON.stringify(payload, null, 2)),
-            sha: sha
-          })
-        });
-      })
       .then(() => {
         document.getElementById("city-buttons").innerHTML = "";
         document.getElementById("thank-you").innerText = `✅ Thanks for voting for ${city}!`;
         localStorage.setItem("votedThisWeek", "true");
       })
-      .catch(err => {
-        document.getElementById("thank-you").innerText = "Something went wrong.";
-        console.error(err);
+      .catch(() => {
+        document.getElementById("thank-you").innerText = "Something went wrong. Try again later.";
       });
     }
 
@@ -153,28 +116,11 @@
       const key = "CLVoteUserID";
       let id = localStorage.getItem(key);
       if (!id) {
-        id = "user_" + Math.random().toString(36).substr(2, 8);
+        id = "user_" + Math.random().toString(36).substring(2, 10);
         localStorage.setItem(key, id);
       }
       return id;
     }
-
-    window.onload = function () {
-      const isAdmin = new URLSearchParams(window.location.search).get("admin") === "710887";
-      if (isAdmin) {
-        const adminSection = document.getElementById("admin-section");
-        if (adminSection) {
-          adminSection.style.display = "grid";
-        }
-      }
-    };
   </script>
-
-  <div class="admin-buttons" id="admin-section" style="display: none;">
-    <button class="admin-button">➕ Boost Mode (100)</button>
-    <button class="admin-button">🏆 Announce Winner</button>
-    <button class="admin-button">🔄 Generate 5 Cities</button>
-    <button class="admin-button">🧹 Reset All</button>
-  </div>
 </body>
 </html>
