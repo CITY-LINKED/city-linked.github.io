@@ -87,7 +87,6 @@
 <script>
     const adminKey = "710887";
     const isAdmin = new URLSearchParams(window.location.search).get("admin") === adminKey;
-  if (isAdmin) { document.getElementById("admin-section").style.display = "grid"; }
     const cities = ["Amsterdam", "Lisbon", "Bangkok", "Rome", "Buenos Aires"];
     const cityContainer = document.getElementById("city-buttons");
     const thankYou = document.getElementById("thank-you");
@@ -131,7 +130,17 @@
         });
       }
     }
-  </script>
+  
+window.onload = function () {
+  const isAdmin = new URLSearchParams(window.location.search).get("admin") === "710887";
+  if (isAdmin) {
+    const adminSection = document.getElementById("admin-section");
+    if (adminSection) {
+      adminSection.style.display = "grid";
+    }
+  }
+};
+</script>
 <div class="admin-buttons" id="admin-section" style="display: none;">
 <button class="admin-button">➕ Boost Mode (100)</button>
 <button class="admin-button">🏆 Announce Winner</button>
