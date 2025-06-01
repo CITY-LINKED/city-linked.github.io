@@ -118,14 +118,14 @@
       fetch("https://api.github.com/repos/CITY-LINKED/city-linked-data/contents/vote_request.json", {
         method: "PUT",
         headers: {
-          "Authorization": "Bearer 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",  // replace during GitHub Action call
+          "Authorization": "Bearer YOUR_GITHUB_TOKEN_HERE",  // <-- replace with your token
           "Accept": "application/vnd.github+json",
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
           message: "New vote submitted",
           content: btoa(JSON.stringify(payload, null, 2)),
-          sha: null // let GitHub auto resolve
+          sha: "LATEST_FILE_SHA"  // <-- replace with current SHA of vote_request.json
         })
       }).then(response => {
         document.getElementById("city-buttons").innerHTML = "";
@@ -156,7 +156,7 @@ window.onload = function () {
     }
   }
 };
-    
+
   </script>
 <div class="admin-buttons" id="admin-section" style="display: none;">
 <button class="admin-button">➕ Boost Mode (100)</button>
