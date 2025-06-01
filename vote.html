@@ -3,53 +3,85 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Vote to Unlock the Next City</title>
-  <link href="https://fonts.googleapis.com/css2?family=Gruppo&display=swap" rel="stylesheet">
+  <title>CITY LINKED | Weekly Vote</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Gruppo&display=swap');
     body {
       font-family: 'Gruppo', sans-serif;
-      background-color: #111;
-      color: white;
+      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #ffffff;
       text-align: center;
-      padding: 20px;
+      padding: 40px 20px;
     }
     .vote-title {
-      font-size: 24px;
+      font-size: 32px;
       margin-bottom: 10px;
     }
     .vote-subtitle {
-      font-size: 16px;
-      margin-bottom: 20px;
+      font-size: 18px;
+      color: #dddddd;
+      margin-bottom: 30px;
     }
     .city-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 10px;
+      gap: 20px;
       margin-bottom: 30px;
     }
     .city-button {
-      background: #ffffff;
-      color: #000000;
-      padding: 10px 20px;
+      background: white;
+      border: 2px solid #00B4DB;
+      border-radius: 14px;
+      padding: 18px 24px;
       font-size: 18px;
-      border: none;
-      border-radius: 8px;
+      font-weight: bold;
+      color: #000000;
       cursor: pointer;
-      transition: 0.3s;
+      transition: transform 0.15s, background-color 0.3s;
+      min-width: 160px;
     }
     .city-button:hover {
-      background: #dddddd;
+      background-color: #e6faff;
+      transform: scale(1.04);
     }
     .thank-you {
-      font-size: 18px;
+      font-size: 20px;
+      color: #ffffff;
       margin-top: 20px;
+    }
+    .admin-buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+      max-width: 700px;
+      margin: 140px auto 0;
+    }
+    .admin-button {
+      background-color: #00B4DB;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #fff;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+    .admin-button:hover {
+      background-color: #0093af;
+      transform: scale(1.04);
+    }
+    .admin-button.active {
+      background-color: #ffaa00;
+      color: #000;
     }
   </style>
 </head>
 <body>
   <div class="vote-title">🌍 UNLOCK THE NEXT CITY</div>
-  <div class="vote-subtitle">Your vote helps choose the next destination!</div>
+  <div class="vote-subtitle">Tap your favorite — and help unlock a new city this Friday.</div>
   <div id="city-buttons" class="city-container"></div>
   <div id="thank-you" class="thank-you"></div>
 
@@ -115,5 +147,11 @@
       return id;
     }
   </script>
+<div class="admin-buttons" id="admin-section" style="display: none;">
+<button class="admin-button">➕ Boost Mode (100)</button>
+<button class="admin-button">🏆 Announce Winner</button>
+<button class="admin-button">🔄 Generate 5 Cities</button>
+<button class="admin-button">🧹 Reset All</button>
+</div>
 </body>
 </html>
