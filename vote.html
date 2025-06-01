@@ -87,6 +87,10 @@
 <script>
     const adminKey = "710887";
     const isAdmin = new URLSearchParams(window.location.search).get("admin") === adminKey;
+if (isAdmin) {
+  document.getElementById("admin-section").style.display = "grid";
+}
+
     const cities = ["Amsterdam", "Lisbon", "Bangkok", "Rome", "Buenos Aires"];
     const cityContainer = document.getElementById("city-buttons");
     const thankYou = document.getElementById("thank-you");
