@@ -146,6 +146,17 @@
       }
       return id;
     }
+
+window.onload = function () {
+  const isAdmin = new URLSearchParams(window.location.search).get("admin") === "710887";
+  if (isAdmin) {
+    const adminSection = document.getElementById("admin-section");
+    if (adminSection) {
+      adminSection.style.display = "grid";
+    }
+  }
+};
+    
   </script>
 <div class="admin-buttons" id="admin-section" style="display: none;">
 <button class="admin-button">➕ Boost Mode (100)</button>
