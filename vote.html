@@ -87,7 +87,6 @@
 
   <script>
     const weeklyCitiesURL = "https://CITY-LINKED.github.io/city-linked-data/weekly_cities.json";
-    const requestEndpoint = "https://city-linked-data.github.io/vote_request.json"; // reference only
     const userId = getOrCreateUserId();
     const isAdmin = window.location.search.includes("710887");
 
@@ -115,23 +114,36 @@
         city: city
       };
 
-      fetch("https://api.github.com/repos/CITY-LINKED/city-linked-data/contents/vote_request.json", {
-        method: "PUT",
+      fetch("https://api.github.com/repos/CITY-LINKED/city-linked-data/contents/request.json", {
+        method: "GET",
         headers: {
-          "Authorization": "Bearer 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",  // <-- replace with your token
-          "Accept": "application/vnd.github+json",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          message: "New vote submitted",
-          content: btoa(JSON.stringify(payload, null, 2)),
-          sha: "a230ce70fd6a48929ae93a922795eb7b4624aa48"  // <-- replace with current SHA of vote_request.json
-        })
-      }).then(response => {
+          "Authorization": "Bearer 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",
+          "Accept": "application/vnd.github+json"
+        }
+      })
+      .then(res => res.json())
+      .then(json => {
+        const sha = json.sha || null;
+        return fetch("https://api.github.com/repos/CITY-LINKED/city-linked-data/contents/request.json", {
+          method: "PUT",
+          headers: {
+            "Authorization": "Bearer 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",
+            "Accept": "application/vnd.github+json",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            message: `New vote: ${city}`,
+            content: btoa(JSON.stringify(payload, null, 2)),
+            sha: sha
+          })
+        });
+      })
+      .then(() => {
         document.getElementById("city-buttons").innerHTML = "";
         document.getElementById("thank-you").innerText = `✅ Thanks for voting for ${city}!`;
         localStorage.setItem("votedThisWeek", "true");
-      }).catch(err => {
+      })
+      .catch(err => {
         document.getElementById("thank-you").innerText = "Something went wrong.";
         console.error(err);
       });
@@ -147,22 +159,22 @@
       return id;
     }
 
-window.onload = function () {
-  const isAdmin = new URLSearchParams(window.location.search).get("admin") === "710887";
-  if (isAdmin) {
-    const adminSection = document.getElementById("admin-section");
-    if (adminSection) {
-      adminSection.style.display = "grid";
-    }
-  }
-};
-
+    window.onload = function () {
+      const isAdmin = new URLSearchParams(window.location.search).get("admin") === "710887";
+      if (isAdmin) {
+        const adminSection = document.getElementById("admin-section");
+        if (adminSection) {
+          adminSection.style.display = "grid";
+        }
+      }
+    };
   </script>
-<div class="admin-buttons" id="admin-section" style="display: none;">
-<button class="admin-button">➕ Boost Mode (100)</button>
-<button class="admin-button">🏆 Announce Winner</button>
-<button class="admin-button">🔄 Generate 5 Cities</button>
-<button class="admin-button">🧹 Reset All</button>
-</div>
+
+  <div class="admin-buttons" id="admin-section" style="display: none;">
+    <button class="admin-button">➕ Boost Mode (100)</button>
+    <button class="admin-button">🏆 Announce Winner</button>
+    <button class="admin-button">🔄 Generate 5 Cities</button>
+    <button class="admin-button">🧹 Reset All</button>
+  </div>
 </body>
 </html>
