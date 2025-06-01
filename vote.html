@@ -1,150 +1,119 @@
-
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>CITY LINKED | Weekly Vote</title>
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Gruppo&display=swap');
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vote to Unlock the Next City</title>
+  <link href="https://fonts.googleapis.com/css2?family=Gruppo&display=swap" rel="stylesheet">
+  <style>
     body {
       font-family: 'Gruppo', sans-serif;
-      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/bg.jpg') no-repeat center center fixed;
-      background-size: cover;
-      color: #ffffff;
+      background-color: #111;
+      color: white;
       text-align: center;
-      padding: 40px 20px;
+      padding: 20px;
     }
     .vote-title {
-      font-size: 32px;
+      font-size: 24px;
       margin-bottom: 10px;
     }
     .vote-subtitle {
-      font-size: 18px;
-      color: #dddddd;
-      margin-bottom: 30px;
+      font-size: 16px;
+      margin-bottom: 20px;
     }
     .city-container {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 20px;
+      gap: 10px;
       margin-bottom: 30px;
     }
     .city-button {
-      background: white;
-      border: 2px solid #00B4DB;
-      border-radius: 14px;
-      padding: 18px 24px;
-      font-size: 18px;
-      font-weight: bold;
+      background: #ffffff;
       color: #000000;
+      padding: 10px 20px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
       cursor: pointer;
-      transition: transform 0.15s, background-color 0.3s;
-      min-width: 160px;
+      transition: 0.3s;
     }
     .city-button:hover {
-      background-color: #e6faff;
-      transform: scale(1.04);
+      background: #dddddd;
     }
     .thank-you {
-      font-size: 20px;
-      color: #ffffff;
+      font-size: 18px;
       margin-top: 20px;
-    }
-    .admin-buttons {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 12px;
-      max-width: 700px;
-      margin: 140px auto 0;
-    }
-    .admin-button {
-      background-color: #00B4DB;
-      border: none;
-      border-radius: 12px;
-      padding: 14px;
-      font-size: 14px;
-      font-weight: bold;
-      color: #fff;
-      cursor: pointer;
-      transition: background-color 0.3s, transform 0.2s;
-    }
-    .admin-button:hover {
-      background-color: #0093af;
-      transform: scale(1.04);
-    }
-    .admin-button.active {
-      background-color: #ffaa00;
-      color: #000;
     }
   </style>
 </head>
-<body><div class="vote-title">🌍 Unlock The Next City</div><div class="vote-subtitle">Tap your favorite — and help unlock a new city this Friday.</div>
-<div class="city-container" id="city-buttons"></div>
-<div id="thank-you" style="display:none;">✅ Thanks for voting!</div>
-<script>
-    const adminKey = "710887";
-    const isAdmin = new URLSearchParams(window.location.search).get("admin") === adminKey;
-    const cities = ["Amsterdam", "Lisbon", "Bangkok", "Rome", "Buenos Aires"];
-    const cityContainer = document.getElementById("city-buttons");
-    const thankYou = document.getElementById("thank-you");
+<body>
+  <div class="vote-title">🌍 UNLOCK THE NEXT CITY</div>
+  <div class="vote-subtitle">Your vote helps choose the next destination!</div>
+  <div id="city-buttons" class="city-container"></div>
+  <div id="thank-you" class="thank-you"></div>
 
-    const hasVoted = localStorage.getItem("votedThisWeek");
+  <script>
+    const weeklyCitiesURL = "https://CITY-LINKED.github.io/city-linked-data/weekly_cities.json";
+    const requestEndpoint = "https://city-linked-data.github.io/vote_request.json"; // reference only
+    const userId = getOrCreateUserId();
+    const isAdmin = window.location.search.includes("710887");
 
-    if (hasVoted && !isAdmin) {
-      cityContainer.innerHTML = "";
-      thankYou.innerText = "✅ You've already voted this week. Come back next Monday!";
-      thankYou.style.display = "block";
+    if (localStorage.getItem("votedThisWeek") && !isAdmin) {
+      document.getElementById("thank-you").innerText = "✅ You’ve already voted. Come back next Monday!";
     } else {
-      cities.forEach(city => {
-        const btn = document.createElement("button");
-        btn.className = "city-button";
-        btn.textContent = city;
-        btn.onclick = () => handleVote(city);
-        cityContainer.appendChild(btn);
+      fetch(weeklyCitiesURL)
+        .then(res => res.json())
+        .then(data => {
+          const container = document.getElementById("city-buttons");
+          data.cities.forEach(city => {
+            const btn = document.createElement("button");
+            btn.className = "city-button";
+            btn.textContent = city;
+            btn.onclick = () => vote(city);
+            container.appendChild(btn);
+          });
+        });
+    }
+
+    function vote(city) {
+      const payload = {
+        timestamp: new Date().toISOString(),
+        user: isAdmin ? "admin_710887" : userId,
+        city: city
+      };
+
+      fetch("https://api.github.com/repos/CITY-LINKED/city-linked-data/contents/vote_request.json", {
+        method: "PUT",
+        headers: {
+          "Authorization": "Bearer YOUR_GITHUB_TOKEN",  // replace during GitHub Action call
+          "Accept": "application/vnd.github+json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          message: "New vote submitted",
+          content: btoa(JSON.stringify(payload, null, 2)),
+          sha: null // let GitHub auto resolve
+        })
+      }).then(response => {
+        document.getElementById("city-buttons").innerHTML = "";
+        document.getElementById("thank-you").innerText = `✅ Thanks for voting for ${city}!`;
+        localStorage.setItem("votedThisWeek", "true");
+      }).catch(err => {
+        document.getElementById("thank-you").innerText = "Something went wrong.";
+        console.error(err);
       });
     }
 
-    function handleVote(city) {
-      cityContainer.innerHTML = "";
-      thankYou.innerText = "✅ Thanks for voting!";
-      thankYou.style.display = "block";
-      localStorage.setItem("votedThisWeek", "true");
-
-      if (isAdmin) {
-        // Admin creates vote_request.json on GitHub (handled by backend Action)
-        fetch("https://CITY-LINKED.github.io/city-linked-data/vote_request.json", {
-          method: "PUT", // note: this won't work directly in browser; GitHub Actions watches the file via commits
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            timestamp: new Date().toISOString(),
-            user: "admin_710887",
-            city: city
-          })
-        }).then(() => {
-          console.log("Admin vote registered for:", city);
-        }).catch(() => {
-          console.log("Simulated admin vote.");
-        });
+    function getOrCreateUserId() {
+      const key = "CLVoteUserID";
+      let id = localStorage.getItem(key);
+      if (!id) {
+        id = "user_" + Math.random().toString(36).substr(2, 8);
+        localStorage.setItem(key, id);
       }
+      return id;
     }
-  
-window.onload = function () {
-  const isAdmin = new URLSearchParams(window.location.search).get("admin") === "710887";
-  if (isAdmin) {
-    const adminSection = document.getElementById("admin-section");
-    if (adminSection) {
-      adminSection.style.display = "grid";
-    }
-  }
-};
-</script>
-<div class="admin-buttons" id="admin-section" style="display: none;">
-<button class="admin-button">➕ Boost Mode (100)</button>
-<button class="admin-button">🏆 Announce Winner</button>
-<button class="admin-button">🔄 Generate 5 Cities</button>
-<button class="admin-button">🧹 Reset All</button>
-</div></body>
+  </script>
+</body>
 </html>
