@@ -4,37 +4,145 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>City Linked Voting</title>
+  <title>CITY LINKED | Weekly Vote</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Gruppo&display=swap');
+    body {
+      font-family: 'Gruppo', sans-serif;
+      background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/bg.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #ffffff;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .vote-title {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+    .vote-subtitle {
+      font-size: 18px;
+      color: #dddddd;
+      margin-bottom: 30px;
+    }
+    .city-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    .city-button {
+      background: white;
+      border: 2px solid #00B4DB;
+      border-radius: 14px;
+      padding: 18px 24px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #000000;
+      cursor: pointer;
+      transition: transform 0.15s, background-color 0.3s;
+      min-width: 160px;
+    }
+    .city-button:hover {
+      background-color: #e6faff;
+      transform: scale(1.04);
+    }
+    .thank-you {
+      font-size: 20px;
+      color: #ffffff;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
-  <h2>Vote Page</h2>
-  <button onclick="voteCity('Bangkok')">Vote for Bangkok</button>
-  <button onclick="voteCity('Lisbon')">Vote for Lisbon</button>
-  <p id="status"></p>
+  <div class="vote-title">🌍 UNLOCK THE NEXT CITY</div>
+  <div class="vote-subtitle">Tap your favorite — and help unlock a new city this Friday.</div>
+  <div id="city-buttons" class="city-container"></div>
+  <div id="thank-you" class="thank-you"></div>
 
   <script type="module">
-    import { castVote } from './firebase-vote.js';
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+    import { getFirestore, collection, doc, setDoc, updateDoc, increment, getDoc, addDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCeLIFvNV83O2PSmffxuBV9TKjeMgW3OzU",
+      authDomain: "city-linked-vote.firebaseapp.com",
+      projectId: "city-linked-vote",
+      storageBucket: "city-linked-vote.appspot.com",
+      messagingSenderId: "208182574750",
+      appId: "1:208182574750:web:ef3f9c6e15cfade286458f"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const weeklyCitiesURL = "https://CITY-LINKED.github.io/city-linked-data/weekly_cities.json";
+    const userId = getOrCreateUserId();
+    const isAdmin = window.location.search.includes("710887");
+
+    const votedKey = `votedThisWeek_${userId}`;
+
+    if (localStorage.getItem(votedKey) && !isAdmin) {
+      document.getElementById("thank-you").innerText = "✅ You’ve already voted. Come back next Monday!";
+    } else {
+      fetch(weeklyCitiesURL)
+        .then(res => res.json())
+        .then(data => {
+          const container = document.getElementById("city-buttons");
+          data.cities.forEach(city => {
+            const btn = document.createElement("button");
+            btn.className = "city-button";
+            btn.textContent = city;
+            btn.onclick = () => vote(city);
+            container.appendChild(btn);
+          });
+        });
+    }
+
+    async function vote(city) {
+      try {
+        // Add to 'votes' collection
+        await addDoc(collection(db, "votes"), {
+          user: isAdmin ? "admin_710887" : userId,
+          city: city,
+          timestamp: new Date().toISOString()
+        });
+
+        // Save user vote to 'user_votes'
+        await setDoc(doc(db, "user_votes", userId), {
+          votedThisWeek: true,
+          voteCity: city,
+          voteTime: new Date().toISOString()
+        });
+
+        // Increment city vote in 'city_database'
+        const cityRef = doc(db, "city_database", city);
+        const citySnap = await getDoc(cityRef);
+        if (citySnap.exists()) {
+          await updateDoc(cityRef, { votes: increment(1) });
+        } else {
+          await setDoc(cityRef, { votes: 1 });
+        }
+
+        // UI feedback
+        document.getElementById("city-buttons").innerHTML = "";
+        document.getElementById("thank-you").innerText = `✅ Thanks for voting for ${city}!`;
+        localStorage.setItem(votedKey, "true");
+      } catch (e) {
+        console.error("Error submitting vote:", e);
+        document.getElementById("thank-you").innerText = "❌ Error submitting vote.";
+      }
+    }
 
     function getOrCreateUserId() {
       const key = "CLVoteUserID";
       let id = localStorage.getItem(key);
       if (!id) {
-        id = "user_" + Math.random().toString(36).substring(2, 10);
+        id = "user_" + Math.random().toString(36).substr(2, 8);
         localStorage.setItem(key, id);
       }
       return id;
     }
-
-    window.voteCity = async function(city) {
-      const userId = getOrCreateUserId();
-      try {
-        await castVote(userId, city);
-        document.getElementById("status").innerText = `✅ Vote for ${city} registered!`;
-      } catch (e) {
-        document.getElementById("status").innerText = "❌ Error submitting vote.";
-        console.error(e);
-      }
-    };
   </script>
 </body>
 </html>
