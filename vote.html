@@ -1,9 +1,7 @@
-
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CITY LINKED | Weekly Vote</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Gruppo&display=swap');
@@ -58,14 +56,29 @@
   <div class="vote-title">🌍 UNLOCK THE NEXT CITY</div>
   <div class="vote-subtitle">Tap your favorite — and help unlock a new city this Friday.</div>
   <div id="city-buttons" class="city-container"></div>
-  <div id="thank-you" class="thank-you"></div>
+  <div id="thank-you" class="thank-you"></div>  <!-- Firebase SDK -->  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+    import { getFirestore, collection, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
 
-  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCeLIFvNV83O2PSmffxuBV9TKjeMgW3OzU",
+      authDomain: "city-linked-vote.firebaseapp.com",
+      projectId: "city-linked-vote",
+      storageBucket: "city-linked-vote.appspot.com",
+      messagingSenderId: "208182574750",
+      appId: "1:208182574750:web:ef3f9c6e15cfade286458f"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
     const weeklyCitiesURL = "https://CITY-LINKED.github.io/city-linked-data/weekly_cities.json";
     const userId = getOrCreateUserId();
     const isAdmin = window.location.search.includes("710887");
 
-    if (localStorage.getItem("votedThisWeek") && !isAdmin) {
+    const votedKey = `votedThisWeek_${userId}`;
+
+    if (localStorage.getItem(votedKey) && !isAdmin) {
       document.getElementById("thank-you").innerText = "✅ You’ve already voted. Come back next Monday!";
     } else {
       fetch(weeklyCitiesURL)
@@ -82,50 +95,21 @@
         });
     }
 
-    function vote(city) {
-      const payload = {
-        timestamp: new Date().toISOString(),
-        user: isAdmin ? "admin_710887" : userId,
-        city: city
-      };
-
-      const apiURL = "https://api.github.com/repos/CITY-LINKED/city-linked-data/contents/vote_request.json";
-      const token = "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"; // Replace before use
-
-      fetch(apiURL, {
-        method: "GET",
-        headers: {
-          "Authorization": "Bearer " + token,
-          "Accept": "application/vnd.github+json"
-        }
-      })
-      .then(res => res.json())
-      .then(data => {
-        const sha = data.sha;
-
-        return fetch(apiURL, {
-          method: "PUT",
-          headers: {
-            "Authorization": "Bearer " + token,
-            "Accept": "application/vnd.github+json",
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            message: "New vote submitted",
-            content: btoa(JSON.stringify(payload, null, 2)),
-            sha: sha
-          })
+    async function vote(city) {
+      try {
+        await addDoc(collection(db, "votes"), {
+          user: isAdmin ? "admin_710887" : userId,
+          city: city,
+          timestamp: new Date().toISOString()
         });
-      })
-      .then(() => {
+
         document.getElementById("city-buttons").innerHTML = "";
         document.getElementById("thank-you").innerText = `✅ Thanks for voting for ${city}!`;
-        localStorage.setItem("votedThisWeek", "true");
-      })
-      .catch(err => {
-        document.getElementById("thank-you").innerText = "Something went wrong.";
-        console.error(err);
-      });
+        localStorage.setItem(votedKey, "true");
+      } catch (e) {
+        console.error("Error adding vote:", e);
+        document.getElementById("thank-you").innerText = "❌ Error submitting vote. Try again later.";
+      }
     }
 
     function getOrCreateUserId() {
@@ -137,6 +121,5 @@
       }
       return id;
     }
-  </script>
-</body>
+  </script></body>
 </html>
