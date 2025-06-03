@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>CITY LINKED | Weekly Vote</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Gruppo&display=swap');
@@ -57,8 +57,8 @@
   <div class="vote-subtitle">Tap your favorite — and help unlock a new city this Friday.</div>
   <div id="city-buttons" class="city-container"></div>
   <div id="thank-you" class="thank-you"></div>  <!-- Firebase SDK -->  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
-    import { getFirestore, collection, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, doc, getDoc, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCeLIFvNV83O2PSmffxuBV9TKjeMgW3OzU",
@@ -72,44 +72,42 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    const weeklyCitiesURL = "https://CITY-LINKED.github.io/city-linked-data/weekly_cities.json";
     const userId = getOrCreateUserId();
+    const weekKey = "2025-06-02"; // set dynamically later
     const isAdmin = window.location.search.includes("710887");
 
-    const votedKey = `votedThisWeek_${userId}`;
+    const thankYou = document.getElementById("thank-you");
 
-    if (localStorage.getItem(votedKey) && !isAdmin) {
-      document.getElementById("thank-you").innerText = "✅ You’ve already voted. Come back next Monday!";
+    const userRef = doc(db, "User_Votes", userId);
+    const userSnap = await getDoc(userRef);
+    if (userSnap.exists() && userSnap.data().week === weekKey && !isAdmin) {
+      thankYou.innerText = "✅ You’ve already voted. Come back next Monday!";
     } else {
-      fetch(weeklyCitiesURL)
-        .then(res => res.json())
-        .then(data => {
-          const container = document.getElementById("city-buttons");
-          data.cities.forEach(city => {
-            const btn = document.createElement("button");
-            btn.className = "city-button";
-            btn.textContent = city;
-            btn.onclick = () => vote(city);
-            container.appendChild(btn);
-          });
-        });
+      const response = await fetch("https://CITY-LINKED.github.io/city-linked-data/weekly_cities.json");
+      const data = await response.json();
+
+      const container = document.getElementById("city-buttons");
+      data.cities.forEach(city => {
+        const btn = document.createElement("button");
+        btn.className = "city-button";
+        btn.textContent = city;
+        btn.onclick = () => vote(city);
+        container.appendChild(btn);
+      });
     }
 
     async function vote(city) {
-      try {
-        await addDoc(collection(db, "votes"), {
-          user: isAdmin ? "admin_710887" : userId,
-          city: city,
-          timestamp: new Date().toISOString()
-        });
+      const cityRef = doc(db, "City_Database", city);
+      await updateDoc(cityRef, { votes: increment(1) });
 
-        document.getElementById("city-buttons").innerHTML = "";
-        document.getElementById("thank-you").innerText = `✅ Thanks for voting for ${city}!`;
-        localStorage.setItem(votedKey, "true");
-      } catch (e) {
-        console.error("Error adding vote:", e);
-        document.getElementById("thank-you").innerText = "❌ Error submitting vote. Try again later.";
-      }
+      await setDoc(doc(db, "User_Votes", userId), {
+        voted: true,
+        week: weekKey
+      });
+
+      document.getElementById("city-buttons").innerHTML = "";
+      thankYou.innerText = `✅ Thanks for voting for ${city}!`;
+      localStorage.setItem("votedThisWeek", "true");
     }
 
     function getOrCreateUserId() {
