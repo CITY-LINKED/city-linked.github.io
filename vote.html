@@ -61,8 +61,8 @@
   <div id="thank-you" class="thank-you"></div>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
-    import { getFirestore, collection, doc, setDoc, updateDoc, increment, getDoc, addDoc } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, doc, setDoc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyCeLIFvNV83O2PSmffxuBV9TKjeMgW3OzU",
@@ -78,60 +78,42 @@
 
     const weeklyCitiesURL = "https://CITY-LINKED.github.io/city-linked-data/weekly_cities.json";
     const userId = getOrCreateUserId();
-    const isAdmin = window.location.search.includes("710887");
 
-    const votedKey = `votedThisWeek_${userId}`;
+    async function checkVoted() {
+      const userRef = doc(db, "User_Votes", userId);
+      const userSnap = await getDoc(userRef);
+      return userSnap.exists() && userSnap.data().votedThisWeek;
+    }
 
-    if (localStorage.getItem(votedKey) && !isAdmin) {
-      document.getElementById("thank-you").innerText = "✅ You’ve already voted. Come back next Monday!";
-    } else {
-      fetch(weeklyCitiesURL)
-        .then(res => res.json())
-        .then(data => {
-          const container = document.getElementById("city-buttons");
-          data.cities.forEach(city => {
-            const btn = document.createElement("button");
-            btn.className = "city-button";
-            btn.textContent = city;
-            btn.onclick = () => vote(city);
-            container.appendChild(btn);
-          });
-        });
+    async function displayCities() {
+      const alreadyVoted = await checkVoted();
+      if (alreadyVoted) {
+        document.getElementById("thank-you").innerText = "✅ You’ve already voted. Come back next Monday!";
+        return;
+      }
+
+      const response = await fetch(weeklyCitiesURL);
+      const data = await response.json();
+      const container = document.getElementById("city-buttons");
+      data.cities.forEach(city => {
+        const btn = document.createElement("button");
+        btn.className = "city-button";
+        btn.textContent = city;
+        btn.onclick = () => vote(city);
+        container.appendChild(btn);
+      });
     }
 
     async function vote(city) {
-      try {
-        // Add to 'votes' collection
-        await addDoc(collection(db, "votes"), {
-          user: isAdmin ? "admin_710887" : userId,
-          city: city,
-          timestamp: new Date().toISOString()
-        });
-
-        // Save user vote to 'user_votes'
-        await setDoc(doc(db, "user_votes", userId), {
-          votedThisWeek: true,
-          voteCity: city,
-          voteTime: new Date().toISOString()
-        });
-
-        // Increment city vote in 'city_database'
-        const cityRef = doc(db, "city_database", city);
-        const citySnap = await getDoc(cityRef);
-        if (citySnap.exists()) {
-          await updateDoc(cityRef, { votes: increment(1) });
-        } else {
-          await setDoc(cityRef, { votes: 1 });
-        }
-
-        // UI feedback
-        document.getElementById("city-buttons").innerHTML = "";
-        document.getElementById("thank-you").innerText = `✅ Thanks for voting for ${city}!`;
-        localStorage.setItem(votedKey, "true");
-      } catch (e) {
-        console.error("Error submitting vote:", e);
-        document.getElementById("thank-you").innerText = "❌ Error submitting vote.";
-      }
+      const cityRef = doc(db, "City_Database", city);
+      await updateDoc(cityRef, { votes: increment(1) });
+      await setDoc(doc(db, "User_Votes", userId), {
+        votedThisWeek: true,
+        voteCity: city,
+        voteTime: new Date().toISOString()
+      });
+      document.getElementById("city-buttons").innerHTML = "";
+      document.getElementById("thank-you").innerText = `✅ Thanks for voting for ${city}!`;
     }
 
     function getOrCreateUserId() {
@@ -143,6 +125,8 @@
       }
       return id;
     }
+
+    displayCities();
   </script>
 </body>
 </html>
