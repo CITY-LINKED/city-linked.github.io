@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,6 +7,7 @@
   <link href="favicon.ico" rel="icon" type="image/x-icon"/>
   <link href="favicon.ico" rel="shortcut icon" type="image/x-icon"/>
   <link href="https://fonts.googleapis.com/css2?family=Gruppo&display=swap" rel="stylesheet" />
+
   <style>
     body {
       margin: 0;
@@ -17,10 +17,12 @@
       background-position: center;
       background-repeat: no-repeat;
       color: white;
+
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+
+      justify-content: flex-start; /* ✅ FIX */
       height: 100vh;
       text-align: center;
       padding: 0 20px;
@@ -35,14 +37,18 @@
       height: clamp(80px, 14vw, 230px);
     }
 
-    /* 🔧 Optional fine-tune for very small screens */
     @media (max-width: 480px) {
       .responsive-logo {
         height: 140px;
         top: 70px;
       }
     }
-    
+
+    /* ✅ NEW: content control */
+    .hero-content {
+      margin-top: clamp(180px, 30vh, 260px);
+    }
+
     h1 {
       font-size: 3rem;
       margin-bottom: 10px;
@@ -70,45 +76,8 @@
       background: #00B4DB;
       color: white;
     }
-/*
-    .badge {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #ff5c5c;
-      color: white;
-      padding: 10px 14px;
-      border-radius: 50px;
-      font-size: 13px;
-      font-weight: bold;
-      cursor: pointer;
-      z-index: 999;
-    }
 
-    .tooltip {
-      display: none;
-      position: fixed;
-      bottom: 70px;
-      right: 20px;
-      background: white;
-      color: black;
-      padding: 12px;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-      max-width: 250px;
-      font-size: 14px;
-      z-index: 1000;
-    }
-
-    .tooltip span {
-      font-weight: bold;
-      cursor: pointer;
-      display: block;
-      margin-top: 8px;
-      text-align: right;
-    }
-*/
-   .trust-box {
+    .trust-box {
       position: fixed;
       bottom: 40px;
       background: rgba(0, 0, 0, 0.6);
@@ -118,52 +87,41 @@
       font-size: 13px;
       text-align: center;
       max-width: 600px;
-   }
+    }
   </style>
 
-<!-- ✅ Universal Social Meta Tags -->
-<meta property="og:title" content="CITY LINKED | Smart Travel Cards." />
-<meta property="og:description" content="No apps. No accounts. Just fast city guides that open in one tap. Trusted by travellers." />
-<meta property="og:image" content="https://city-linked.github.io/images/share-image.png" />
-<meta property="og:url" content="https://city-linked.github.io/" />
-<meta property="og:type" content="website" />
+  <!-- Social Meta -->
+  <meta property="og:title" content="CITY LINKED | Smart Travel Cards." />
+  <meta property="og:description" content="No apps. No accounts. Just fast city guides that open in one tap. Trusted by travellers." />
+  <meta property="og:image" content="https://city-linked.github.io/images/share-image.png" />
+  <meta property="og:url" content="https://city-linked.github.io/" />
+  <meta property="og:type" content="website" />
 
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="CITY LINKED | Smart Travel Cards." />
-<meta name="twitter:description" content="No apps. No accounts. Just fast city guides that open in one tap. Trusted by travellers." />
-<meta name="twitter:image" content="https://city-linked.github.io/images/share-image.png" />
-
-<meta name="image" content="https://city-linked.github.io/images/share-image.png" />
-
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="CITY LINKED | Smart Travel Cards." />
+  <meta name="twitter:description" content="No apps. No accounts. Just fast city guides that open in one tap. Trusted by travellers." />
+  <meta name="twitter:image" content="https://city-linked.github.io/images/share-image.png" />
 </head>
+
 <body>
+
   <img src="logo.png" alt="CITY LINKED Logo" class="responsive-logo" />
-  <h1>Plan Less. Explore More.</h1>
-  <p>Your next trip simplified with Travel Cards <br>
-     Everything you need in one place to move smart, fast and freely.</p>
-  <a href="homepage.html" class="cta">Choose Your City</a>
-<!-- <p style="margin-top: 30px; font-size: 15px; color: white;">
-  🔓 <a href="vote.html" style="color: #00ffff; text-decoration: none;">Choose what’s next</a> and help unlock a new city.
-</p> -->
+
+  <!-- ✅ WRAPPED CONTENT -->
+  <div class="hero-content">
+    <h1>Plan Less. Explore More.</h1>
+    <p>
+      Your next trip simplified with Travel Cards <br>
+      Everything you need in one place to move smart, fast and freely.
+    </p>
+    <a href="homepage.html" class="cta">Choose Your City</a>
+  </div>
 
   <div class="trust-box">
     ✅ No logins &nbsp; 🔒 No data collected &nbsp; 🌍 Built by travelers.
   </div>
-  
-<!--  <div id="viral-badge" class="badge" onclick="toggleTooltip()">🔥 Top cities unlock new themes</div>
-  <div id="tooltip" class="tooltip">
-    The more people share a city, the higher it climbs. The top cities unlock exclusive themes. 📈
-    <span onclick="toggleTooltip()">[close]</span>
-  </div>
 
-  <script>
-    function toggleTooltip() {
-      const tip = document.getElementById("tooltip");
-      tip.style.display = (tip.style.display === "none" || tip.style.display === "") ? "block" : "none";
-    }
-  </script>
--->
-  
   <script src="citylinked_tracking.js"></script>
+
 </body>
 </html>
